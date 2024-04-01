@@ -29,29 +29,7 @@ const LoginPage = () => {
   }, []);
 
   const handleSignUp = async () => {
-    console.log();
-    const res = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${location.origin}/auth/callback`,
-      },
-    });
-    if (res.error) {
-      let error = res.error.message;
-      console.log(error);
-      if (error === "User already registered") {
-        loginAlert.classList.remove("hidden");
-        loginAlert.innerHTML = `<p> User Already Exists, Try signin in </p>`;
-      }
-      if (error === "Password should be at least 6 characters.") {
-        loginAlert.classList.remove("hidden");
-        loginAlert.innerHTML = `<p> Password should be at least 6 characters. </p>`;
-      }
-    } else {
-      setUser(res.data.user);
-      router.push("/");
-    }
+    router.push("/signup");
   };
 
   const handleSignIn = async () => {
