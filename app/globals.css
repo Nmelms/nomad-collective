@@ -95,6 +95,9 @@ main {
   height: 90vh;
   max-height: 90vh;
 }
+.hidden {
+  visibility: hidden;
+}
 .leaflet-container {
   z-index: 1;
 }
@@ -275,7 +278,6 @@ main {
   padding: 0.5rem;
   border-radius: 15px;
   border: 2px solid red;
-  visibility: hidden;
 }
 /* profile page styles */
 

@@ -14,8 +14,8 @@ const LoginPage = () => {
   // const [user, setUser] = useState(null);
   // const [loading, setLoading] = useState(true);
   const router = useRouter();
-
   const supabase = createClientComponentClient();
+  let loginAlert = document.querySelector(".login-alert");
 
   useEffect(() => {
     async function getUser() {
@@ -37,18 +37,22 @@ const LoginPage = () => {
         emailRedirectTo: `${location.origin}/auth/callback`,
       },
     });
-    setUser(res.data.user);
-    console.log(res, " this is the sign up res");
-    router.push("/");
+    if (res.error) {
+      let error = res.error.message;
+      if (error === "User already registered") {
+        console.log("hello");
+      }
+    } else {
+      setUser(res.data.user);
+      router.push("/");
+    }
   };
 
   const handleSignIn = async () => {
     const res = await supabase.auth.signInWithPassword({ email, password });
     if (res.error) {
-      let loginAlert = document.querySelector(".login-alert");
-      if (loginAlert) {
-        loginAlert.style.visibility = "visible";
-      }
+      loginAlert.classList.remove("hidden");
+      loginAlert.innerHTML = `<p> UserName or Password Incorrect </p>`;
     } else {
       setUser(res.data.user);
       router.push("/");
@@ -58,9 +62,7 @@ const LoginPage = () => {
   return (
     <div className="login-page">
       <div className=" login-form-wrapper d-flex flex-column ">
-        <div className="login-alert">
-          <p className="m-0">Username Or password is Incorrect</p>
-        </div>
+        <div className="login-alert hidden"></div>
         <Form>
           <Form.Group className="mb-3" controlId="email">
             <Form.Control
