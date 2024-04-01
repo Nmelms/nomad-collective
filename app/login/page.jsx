@@ -38,18 +38,29 @@ const LoginPage = () => {
       },
     });
     setUser(res.data.user);
+    console.log(res, " this is the sign up res");
     router.push("/");
   };
 
   const handleSignIn = async () => {
     const res = await supabase.auth.signInWithPassword({ email, password });
-    setUser(res.data.user);
-    router.push("/");
+    if (res.error) {
+      let loginAlert = document.querySelector(".login-alert");
+      if (loginAlert) {
+        loginAlert.style.visibility = "visible";
+      }
+    } else {
+      setUser(res.data.user);
+      router.push("/");
+    }
   };
 
   return (
     <div className="login-page">
       <div className=" login-form-wrapper d-flex flex-column ">
+        <div className="login-alert">
+          <p className="m-0">Username Or password is Incorrect</p>
+        </div>
         <Form>
           <Form.Group className="mb-3" controlId="email">
             <Form.Control

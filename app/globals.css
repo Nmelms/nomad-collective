@@ -269,6 +269,14 @@ main {
   align-items: center;
 }
 
+.login-alert {
+  background-color: white;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border-radius: 15px;
+  border: 2px solid red;
+  visibility: hidden;
+}
 /* profile page styles */
 
 .profile-page {
