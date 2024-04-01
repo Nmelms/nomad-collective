@@ -19,7 +19,6 @@ const BottomNav = () => {
       setShowOffcanvas(true);
     }
     if (cavnas === "profile") {
-      console.log(user, "this the user");
       if (user) {
         router.push("/profile");
       } else {

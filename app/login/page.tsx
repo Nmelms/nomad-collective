@@ -49,7 +49,7 @@ const LoginPage = () => {
 
   return (
     <div className="login-page">
-      <div className=" login-form-wrapper ">
+      <div className=" login-form-wrapper d-flex flex-column ">
         <Form>
           <Form.Group className="mb-3" controlId="email">
             <Form.Control
@@ -69,12 +69,14 @@ const LoginPage = () => {
             />
           </Form.Group>
         </Form>
-        <Button variant="primary" onClick={handleSignUp} type="submit">
-          sign Up
-        </Button>
-        <Button variant="primary" onClick={handleSignIn} type="submit">
-          Sign in
-        </Button>
+        <div className="d-flex">
+          <Button variant="primary me-2" onClick={handleSignUp} type="submit">
+            sign Up
+          </Button>
+          <Button variant="primary ms-2" onClick={handleSignIn} type="submit">
+            Sign in
+          </Button>
+        </div>
       </div>
     </div>
   );
