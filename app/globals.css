@@ -256,6 +256,7 @@ main {
 
 .login-page {
   position: absolute;
+  z-index: 2;
   top: 0;
   left: 0;
   height: 100dvh;

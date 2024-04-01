@@ -39,9 +39,14 @@ const LoginPage = () => {
     });
     if (res.error) {
       let error = res.error.message;
+      console.log(error);
       if (error === "User already registered") {
         loginAlert.classList.remove("hidden");
         loginAlert.innerHTML = `<p> User Already Exists, Try signin in </p>`;
+      }
+      if (error === "Password should be at least 6 characters.") {
+        loginAlert.classList.remove("hidden");
+        loginAlert.innerHTML = `<p> Password should be at least 6 characters. </p>`;
       }
     } else {
       setUser(res.data.user);
