@@ -1,6 +1,6 @@
 "use client";
-
 import useUserStore from "../useUserStore";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Button } from "react-bootstrap";
@@ -11,6 +11,15 @@ const ProfilePage = () => {
   const supabase = createClientComponentClient();
   const { setUser, user } = useUserStore();
   const router = useRouter();
+
+  useEffect(() => {
+    async function getUser() {
+      const res = await supabase.auth.getUser();
+      setUser(res.data);
+    }
+
+    getUser();
+  }, []);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -27,6 +36,7 @@ const ProfilePage = () => {
           <FontAwesomeIcon className="edit-icon" icon={faPen} />
         </div>
       </div>
+      <h2>{user.user_metadata.userName}</h2>
       <Button onClick={handleSignOut}>Sign out</Button>
     </div>
   );
