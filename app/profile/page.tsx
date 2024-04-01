@@ -22,8 +22,8 @@ const ProfilePage = () => {
     router.push("/");
   };
 
-  {
-    user && (
+  if (user) {
+    return (
       <div className="profile-page d-flex flex-column align-items-center">
         <div className="profile-picture-wrapper mt-5">
           <img className="profile-picture" src="/no-image.webp" alt="" />
