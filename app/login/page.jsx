@@ -28,6 +28,7 @@ const LoginPage = () => {
     getUser();
   }, []);
 
+  console.log(user, "this is the user");
   const handleSignUp = async () => {
     router.push("/signup");
   };

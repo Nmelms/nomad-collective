@@ -12,15 +12,6 @@ const ProfilePage = () => {
   const { setUser, user } = useUserStore();
   const router = useRouter();
 
-  useEffect(() => {
-    async function getUser() {
-      const res = await supabase.auth.getUser();
-      setUser(res.data);
-    }
-
-    getUser();
-  }, []);
-
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     setUser(null);
@@ -36,7 +27,8 @@ const ProfilePage = () => {
           <FontAwesomeIcon className="edit-icon" icon={faPen} />
         </div>
       </div>
-      <h2>{user.user_metadata.userName}</h2>
+      {user && <h2>{user.user_metadata.userName}</h2>}
+
       <Button onClick={handleSignOut}>Sign out</Button>
     </div>
   );
