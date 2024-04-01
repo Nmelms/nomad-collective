@@ -95,6 +95,9 @@ main {
   height: 90vh;
   max-height: 90vh;
 }
+.hidden {
+  visibility: hidden;
+}
 .leaflet-container {
   z-index: 1;
 }
@@ -247,4 +250,44 @@ main {
 }
 .back-arrow {
   color: black;
+}
+
+/* login page styles */
+
+.login-page {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  height: 100dvh;
+  width: 100vw;
+  background-color: white;
+}
+
+.login-form-wrapper {
+  background-color: #e2725b;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-alert {
+  background-color: white;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border-radius: 15px;
+  border: 2px solid red;
+}
+/* profile page styles */
+
+.profile-page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100dvh;
+  width: 100vw;
+  background-color: white;
+  z-index: 2;
 }

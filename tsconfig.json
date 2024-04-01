@@ -111,7 +111,8 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx",
-    "app/useUserStore.jsx"
+    "app/useUserStore.jsx",
+    "app/login/page.jsx"
   ],
   "exclude": ["node_modules"]
 }
