@@ -40,7 +40,8 @@ const LoginPage = () => {
     if (res.error) {
       let error = res.error.message;
       if (error === "User already registered") {
-        console.log("hello");
+        loginAlert.classList.remove("hidden");
+        loginAlert.innerHTML = `<p> User Already Exists, Try signin in </p>`;
       }
     } else {
       setUser(res.data.user);
