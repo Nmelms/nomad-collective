@@ -288,6 +288,37 @@ main {
   left: 0;
   height: 100dvh;
   width: 100vw;
-  background-color: white;
+  background-color: #e2725b;
   z-index: 2;
+}
+.profile-picture-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-picture {
+  width: 60vw;
+  height: 60vw;
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.edit-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 1/1;
+  width: 30px;
+  background-color: white;
+  position: absolute;
+  bottom: 5%;
+  right: 10%;
+  padding: 0.25rem;
+  border-radius: 50%;
+}
+.edit-icon {
+  font-size: 15px;
+  color: black;
+  cursor: pointer;
 }
