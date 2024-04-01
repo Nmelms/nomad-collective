@@ -11,6 +11,9 @@ const ProfilePage = () => {
   const supabase = createClientComponentClient();
   const { setUser, user } = useUserStore();
   const router = useRouter();
+  if (!user) {
+    router.push("/login");
+  }
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -19,19 +22,21 @@ const ProfilePage = () => {
     router.push("/");
   };
 
-  return (
-    <div className="profile-page d-flex flex-column align-items-center">
-      <div className="profile-picture-wrapper mt-5">
-        <img className="profile-picture" src="/no-image.webp" alt="" />
-        <div className="edit-icon-wrapper">
-          <FontAwesomeIcon className="edit-icon" icon={faPen} />
+  {
+    user && (
+      <div className="profile-page d-flex flex-column align-items-center">
+        <div className="profile-picture-wrapper mt-5">
+          <img className="profile-picture" src="/no-image.webp" alt="" />
+          <div className="edit-icon-wrapper">
+            <FontAwesomeIcon className="edit-icon" icon={faPen} />
+          </div>
         </div>
-      </div>
-      {user && <h2>{user.user_metadata.userName}</h2>}
+        <h2>{user.user_metadata.userName}</h2>
 
-      <Button onClick={handleSignOut}>Sign out</Button>
-    </div>
-  );
+        <Button onClick={handleSignOut}>Sign out</Button>
+      </div>
+    );
+  }
 };
 
 export default ProfilePage;
