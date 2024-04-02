@@ -15,11 +15,15 @@ export default function Home() {
   useEffect(() => {
     async function checkUser() {
       const res = await supabase.auth.getUser();
-      console.log("setUSer ram");
-      if (!user) {
-        setUser(res.data.user);
+
+      if (res.data.user) {
+        const userId = res.data.user.id;
+        localStorage.setItem("userId", userId);
+      } else {
+        localStorage.removeItem("userId");
       }
     }
+
     checkUser();
   }, []);
   return <ShopOffcanvas />;

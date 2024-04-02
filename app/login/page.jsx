@@ -18,6 +18,17 @@ const LoginPage = () => {
   let loginAlert = document.querySelector(".login-alert");
 
   useEffect(() => {
+    const checkUser = async () => {
+      const res = await supabase.auth.getUser();
+      if (res.data.user) {
+        router.push("/profile");
+      }
+    };
+
+    checkUser();
+  }, []);
+
+  useEffect(() => {
     async function getUser() {
       const res = await supabase.auth.getUser();
 

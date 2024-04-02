@@ -14,15 +14,23 @@ const ProfilePage = () => {
   const [isEditable, setIsEditable] = useState(true);
   const { setUser, user } = useUserStore();
   // console.log(user.user_metadata.userName, "user in profile");
-  const [userName, setUserName] = useState(user.user_metadata.userName);
+  // const [userName, setUserName] = useState(user.user_metadata.userName);
+  const [localUser, setLocalUser] = useState(null);
   const router = useRouter();
-  useEffect(() => {
-    if (!user) {
-      router.push("/login");
-    }
-  }, []);
+  const userId = localStorage.getItem("userId");
 
-  console.log(user);
+  useEffect(() => {
+    const checkUser = async () => {
+      const res = await supabase.auth.getUser();
+      if (!res.data.user) {
+        router.push("/login");
+      } else {
+        setLocalUser(res.data.user);
+      }
+    };
+
+    checkUser();
+  }, []);
 
   const handleSave = async (userId) => {
     console.log(userId);
@@ -45,23 +53,24 @@ const ProfilePage = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(user, "this is the new user");
-  }, [user]);
+  // useEffect(() => {
+  //   console.log(user, "this is the new user");
+  // }, [user]);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     setUser(null);
+    setLocalUser(null);
     router.push("/");
   };
 
-  if (user) {
+  if (localUser) {
     return (
       <div className="profile-page d-flex flex-column align-items-center">
         <div className="profile-picture-wrapper mt-5">
           <img className="profile-picture" src="/no-image.webp" alt="" />
         </div>
-        <h2>{user.user_metadata.userName}</h2>
+        <h2>{localUser.user_metadata.userName}</h2>
         <Accordion className="w-100 px-3" defaultActiveKey="0">
           <Accordion.Item eventKey="0">
             <Accordion.Header> Account Info</Accordion.Header>
@@ -78,7 +87,7 @@ const ProfilePage = () => {
                     readOnly
                     plaintext
                     type="email"
-                    value={`${user.user_metadata.email}`}
+                    value={`${localUser.user_metadata.email}`}
                     placeholder="Email"
                   />
                 </Form.Group>
@@ -89,7 +98,7 @@ const ProfilePage = () => {
                     type="text"
                     readOnly={isEditable}
                     plaintext={isEditable}
-                    value={userName}
+                    // value={userName}
                     onChange={(e) => setUserName(e.target.value)}
                     placeholder="Email"
                   />
@@ -111,7 +120,7 @@ const ProfilePage = () => {
           </Accordion.Item>
         </Accordion>
 
-        <Button onClick={() => handleSignOut}>Sign out</Button>
+        <Button onClick={() => handleSignOut()}>Sign out</Button>
       </div>
     );
   }
