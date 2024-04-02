@@ -15,6 +15,7 @@ export default function Home() {
   useEffect(() => {
     async function checkUser() {
       const res = await supabase.auth.getUser();
+      console.log("setUSer ram");
       if (!user) {
         setUser(res.data.user);
       }

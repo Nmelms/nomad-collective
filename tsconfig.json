@@ -112,7 +112,8 @@
     "**/*.ts",
     "**/*.tsx",
     "app/useUserStore.jsx",
-    "app/login/page.jsx"
+    "app/login/page.jsx",
+    "app/profile/page.jsx"
   ],
   "exclude": ["node_modules"]
 }
