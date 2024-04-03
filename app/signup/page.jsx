@@ -23,7 +23,7 @@ const SignupPage = () => {
       options: {
         emailRedirectTo: `${location.origin}/auth/callback`,
         data: {
-          userName,
+          display_name: userName,
         },
       },
     });

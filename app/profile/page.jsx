@@ -46,7 +46,7 @@ const ProfilePage = () => {
       }
       const res = await supabase.storage
         .from("profile-pictures")
-        .upload(`${localUser.id}/${file.name}`, file, {
+        .upload(`${localUser.id}/profile`, file, {
           cacheControl: "3600",
           upsert: false,
         });
