@@ -56,8 +56,8 @@ const ProfilePage = () => {
     try {
       const { data, error } = await supabase.auth.updateUser({
         data: {
-          userName: userName,
           // Include other metadata properties here
+          userName: userName,
         },
       });
 
@@ -66,6 +66,7 @@ const ProfilePage = () => {
       } else {
         console.log("User metadata updated successfully:", data.user);
         setUser(data.user);
+        checkUser();
       }
     } catch (error) {
       console.error("Error updating user metadata:", error.message);
@@ -93,7 +94,7 @@ const ProfilePage = () => {
             alt=""
           />
         </div>
-        <h2>{userName}</h2>
+        <h2>{localUser.user_metadata.userName}</h2>
         <Accordion className="w-100 px-3" defaultActiveKey="0">
           <Accordion.Item eventKey="0">
             <Accordion.Header> Account Info</Accordion.Header>
