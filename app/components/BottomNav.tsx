@@ -18,13 +18,9 @@ const BottomNav = () => {
     if (cavnas === "add") {
       setShowOffcanvas(true);
     }
-    if (cavnas === "profile") {
-      if (user) {
-        router.push("/profile");
-      } else {
-        router.push("/login");
-      }
-    }
+    // if (cavnas === "profile") {
+    //   router.push("/profile");
+    // }
   };
   return (
     <div className="container bottom-nav">
@@ -37,18 +33,22 @@ const BottomNav = () => {
           />
         </div>
         <div className="col-4 d-flex justify-content-center align-items-center">
-          <FontAwesomeIcon
-            onClick={(e) => handleAddClick(e, "menu")}
-            className="plus-icon btn-border"
-            icon={faBars}
-          />
+          <a href="/profile">
+            <FontAwesomeIcon
+              onClick={(e) => handleAddClick(e, "menu")}
+              className="plus-icon btn-border"
+              icon={faBars}
+            />
+          </a>
         </div>
         <div className="col-4 d-flex justify-content-center align-items-center">
-          <FontAwesomeIcon
-            onClick={(e) => handleAddClick(e, "profile")}
-            className="plus-icon btn-border"
-            icon={faUser}
-          />
+          <a href="/profile" className="plus-icon-link">
+            <FontAwesomeIcon
+              onClick={(e) => handleAddClick(e, "profile")}
+              className="plus-icon btn-border"
+              icon={faUser}
+            />
+          </a>
         </div>
       </div>
     </div>
