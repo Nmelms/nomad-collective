@@ -10,6 +10,10 @@ import Accordion from "react-bootstrap/Accordion";
 import { Form } from "react-bootstrap";
 
 const ProfilePage = () => {
+  useEffect(() => {
+    checkUser();
+  }, []);
+
   const supabase = createClientComponentClient();
   const [isEditable, setIsEditable] = useState(true);
   const { setUser, user } = useUserStore();
@@ -17,26 +21,55 @@ const ProfilePage = () => {
 
   const [localUser, setLocalUser] = useState(null);
   const [userName, setUserName] = useState(null);
+  const [bio, setBio] = useState(localUser?.user_metadata.bio || null);
   const router = useRouter();
   // const userId = localStorage.getItem("userId");
+  const checkUser = async () => {
+    console.log("check user ran");
+    const res = await supabase.auth.getUser();
+    if (res.data.user) {
+      setLocalUser(res.data.user);
+      setUserName(res.data.user.user_metadata.userName);
+      setBio(res.data.user.user_metadata.bio);
+    }
+  };
 
-  useEffect(() => {
-    const checkUser = async () => {
-      const res = await supabase.auth.getUser();
-      if (res.data.user) {
-        setLocalUser(res.data.user);
-        setUserName(res.data.user.user_metadata.userName);
+  console.log(localUser, "this si the local user");
+
+  async function uploadImage(file) {
+    try {
+      if (localUser.user_metadata.profilePic) {
+        // Delete the previous profile picture from storage
+        await supabase.storage
+          .from("profile-pictures")
+          .remove([localUser.user_metadata.profilePic]);
       }
-    };
-    checkUser();
-  }, []);
+      const res = await supabase.storage
+        .from("profile-pictures")
+        .upload(`${localUser.id}/${file.name}`, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+      if (res) {
+        const { data, error } = await supabase.auth.updateUser({
+          data: {
+            profilePic: res.data.path,
+          },
+        });
+        checkUser();
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  }
 
   const handleSave = async (userId) => {
     try {
       const { data, error } = await supabase.auth.updateUser({
         data: {
-          userName: userName,
           // Include other metadata properties here
+          userName,
+          bio,
         },
       });
 
@@ -45,6 +78,7 @@ const ProfilePage = () => {
       } else {
         console.log("User metadata updated successfully:", data.user);
         setUser(data.user);
+        checkUser();
       }
     } catch (error) {
       console.error("Error updating user metadata:", error.message);
@@ -62,9 +96,17 @@ const ProfilePage = () => {
     return (
       <div className="profile-page d-flex flex-column align-items-center">
         <div className="profile-picture-wrapper mt-5">
-          <img className="profile-picture" src="/no-image.webp" alt="" />
+          <img
+            className="profile-picture"
+            src={
+              localUser.user_metadata.profilePic
+                ? `https://xlvjgjhetfrtaigrimtd.supabase.co/storage/v1/object/public/profile-pictures/${localUser.user_metadata.profilePic}`
+                : "/no-image.webp"
+            }
+            alt=""
+          />
         </div>
-        <h2>{userName}</h2>
+        <h2>{localUser.user_metadata.userName}</h2>
         <Accordion className="w-100 px-3" defaultActiveKey="0">
           <Accordion.Item eventKey="0">
             <Accordion.Header> Account Info</Accordion.Header>
@@ -98,14 +140,23 @@ const ProfilePage = () => {
                 </Form.Group>
                 <Form.Group controlId="formImageUpload">
                   <Form.Label>Upload Image</Form.Label>
-                  <Form.Control type="file" accept="image/*" />
+                  <Form.Control
+                    onChange={(e) => uploadImage(e.target.files[0])}
+                    type="file"
+                    accept="image/*"
+                  />
                 </Form.Group>
                 <Form.Group
                   className="mb-3"
                   controlId="exampleForm.ControlTextarea1"
                 >
                   <Form.Label>Bio</Form.Label>
-                  <Form.Control as="textarea" rows={3} />
+                  <Form.Control
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
+                    as="textarea"
+                    rows={3}
+                  />
                 </Form.Group>
                 <Button onClick={() => handleSave(localUser.id)}>Save</Button>
               </Form>
