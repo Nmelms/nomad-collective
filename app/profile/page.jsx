@@ -10,6 +10,10 @@ import Accordion from "react-bootstrap/Accordion";
 import { Form } from "react-bootstrap";
 
 const ProfilePage = () => {
+  useEffect(() => {
+    checkUser();
+  }, []);
+
   const supabase = createClientComponentClient();
   const [isEditable, setIsEditable] = useState(true);
   const { setUser, user } = useUserStore();
@@ -17,6 +21,7 @@ const ProfilePage = () => {
 
   const [localUser, setLocalUser] = useState(null);
   const [userName, setUserName] = useState(null);
+  const [bio, setBio] = useState(localUser?.user_metadata.bio || null);
   const router = useRouter();
   // const userId = localStorage.getItem("userId");
   const checkUser = async () => {
@@ -25,14 +30,20 @@ const ProfilePage = () => {
     if (res.data.user) {
       setLocalUser(res.data.user);
       setUserName(res.data.user.user_metadata.userName);
+      setBio(res.data.user.user_metadata.bio);
     }
   };
-  useEffect(() => {
-    checkUser();
-  }, []);
+
+  console.log(localUser, "this si the local user");
 
   async function uploadImage(file) {
     try {
+      if (localUser.user_metadata.profilePic) {
+        // Delete the previous profile picture from storage
+        await supabase.storage
+          .from("profile-pictures")
+          .remove([localUser.user_metadata.profilePic]);
+      }
       const res = await supabase.storage
         .from("profile-pictures")
         .upload(`${localUser.id}/${file.name}`, file, {
@@ -57,7 +68,8 @@ const ProfilePage = () => {
       const { data, error } = await supabase.auth.updateUser({
         data: {
           // Include other metadata properties here
-          userName: userName,
+          userName,
+          bio,
         },
       });
 
@@ -139,7 +151,12 @@ const ProfilePage = () => {
                   controlId="exampleForm.ControlTextarea1"
                 >
                   <Form.Label>Bio</Form.Label>
-                  <Form.Control as="textarea" rows={3} />
+                  <Form.Control
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
+                    as="textarea"
+                    rows={3}
+                  />
                 </Form.Group>
                 <Button onClick={() => handleSave(localUser.id)}>Save</Button>
               </Form>
