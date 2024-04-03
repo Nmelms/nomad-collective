@@ -14,26 +14,24 @@ const ProfilePage = () => {
   const [isEditable, setIsEditable] = useState(true);
   const { setUser, user } = useUserStore();
   // console.log(user.user_metadata.userName, "user in profile");
-  // const [userName, setUserName] = useState(user.user_metadata.userName);
+
   const [localUser, setLocalUser] = useState(null);
+  const [userName, setUserName] = useState(null);
   const router = useRouter();
-  const userId = localStorage.getItem("userId");
+  // const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     const checkUser = async () => {
       const res = await supabase.auth.getUser();
-      if (!res.data.user) {
-        router.push("/login");
-      } else {
+      if (res.data.user) {
         setLocalUser(res.data.user);
+        setUserName(res.data.user.user_metadata.userName);
       }
     };
-
     checkUser();
   }, []);
 
   const handleSave = async (userId) => {
-    console.log(userId);
     try {
       const { data, error } = await supabase.auth.updateUser({
         data: {
@@ -53,10 +51,6 @@ const ProfilePage = () => {
     }
   };
 
-  // useEffect(() => {
-  //   console.log(user, "this is the new user");
-  // }, [user]);
-
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     setUser(null);
@@ -70,7 +64,7 @@ const ProfilePage = () => {
         <div className="profile-picture-wrapper mt-5">
           <img className="profile-picture" src="/no-image.webp" alt="" />
         </div>
-        <h2>{localUser.user_metadata.userName}</h2>
+        <h2>{userName}</h2>
         <Accordion className="w-100 px-3" defaultActiveKey="0">
           <Accordion.Item eventKey="0">
             <Accordion.Header> Account Info</Accordion.Header>
@@ -94,11 +88,10 @@ const ProfilePage = () => {
 
                 <Form.Group className="mb-3" controlId="email">
                   <Form.Control
-                    // onChange={(e) => setEmail(e.target.value)}
                     type="text"
                     readOnly={isEditable}
                     plaintext={isEditable}
-                    // value={userName}
+                    value={userName}
                     onChange={(e) => setUserName(e.target.value)}
                     placeholder="Email"
                   />
@@ -114,7 +107,7 @@ const ProfilePage = () => {
                   <Form.Label>Bio</Form.Label>
                   <Form.Control as="textarea" rows={3} />
                 </Form.Group>
-                <Button onClick={() => handleSave(user.id)}>Save</Button>
+                <Button onClick={() => handleSave(localUser.id)}>Save</Button>
               </Form>
             </Accordion.Body>
           </Accordion.Item>
