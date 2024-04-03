@@ -15,18 +15,7 @@ const LoginPage = () => {
   // const [loading, setLoading] = useState(true);
   const router = useRouter();
   const supabase = createClientComponentClient();
-  let loginAlert = document.querySelector(".login-alert");
-
-  useEffect(() => {
-    const checkUser = async () => {
-      const res = await supabase.auth.getUser();
-      if (res.data.user) {
-        router.push("/profile");
-      }
-    };
-
-    checkUser();
-  }, []);
+  // let loginAlert = document.querySelector(".login-alert");
 
   useEffect(() => {
     async function getUser() {
