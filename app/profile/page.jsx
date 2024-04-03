@@ -19,17 +19,38 @@ const ProfilePage = () => {
   const [userName, setUserName] = useState(null);
   const router = useRouter();
   // const userId = localStorage.getItem("userId");
-
+  const checkUser = async () => {
+    console.log("check user ran");
+    const res = await supabase.auth.getUser();
+    if (res.data.user) {
+      setLocalUser(res.data.user);
+      setUserName(res.data.user.user_metadata.userName);
+    }
+  };
   useEffect(() => {
-    const checkUser = async () => {
-      const res = await supabase.auth.getUser();
-      if (res.data.user) {
-        setLocalUser(res.data.user);
-        setUserName(res.data.user.user_metadata.userName);
-      }
-    };
     checkUser();
   }, []);
+
+  async function uploadImage(file) {
+    try {
+      const res = await supabase.storage
+        .from("profile-pictures")
+        .upload(`${localUser.id}/${file.name}`, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+      if (res) {
+        const { data, error } = await supabase.auth.updateUser({
+          data: {
+            profilePic: res.data.path,
+          },
+        });
+        checkUser();
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  }
 
   const handleSave = async (userId) => {
     try {
@@ -62,7 +83,15 @@ const ProfilePage = () => {
     return (
       <div className="profile-page d-flex flex-column align-items-center">
         <div className="profile-picture-wrapper mt-5">
-          <img className="profile-picture" src="/no-image.webp" alt="" />
+          <img
+            className="profile-picture"
+            src={
+              localUser.user_metadata.profilePic
+                ? `https://xlvjgjhetfrtaigrimtd.supabase.co/storage/v1/object/public/profile-pictures/${localUser.user_metadata.profilePic}`
+                : "/no-image.webp"
+            }
+            alt=""
+          />
         </div>
         <h2>{userName}</h2>
         <Accordion className="w-100 px-3" defaultActiveKey="0">
@@ -98,7 +127,11 @@ const ProfilePage = () => {
                 </Form.Group>
                 <Form.Group controlId="formImageUpload">
                   <Form.Label>Upload Image</Form.Label>
-                  <Form.Control type="file" accept="image/*" />
+                  <Form.Control
+                    onChange={(e) => uploadImage(e.target.files[0])}
+                    type="file"
+                    accept="image/*"
+                  />
                 </Form.Group>
                 <Form.Group
                   className="mb-3"
