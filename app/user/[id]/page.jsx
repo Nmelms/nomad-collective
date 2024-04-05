@@ -35,6 +35,7 @@ const UserProfile = ({ params }) => {
           src={`https://xlvjgjhetfrtaigrimtd.supabase.co/storage/v1/object/public/profile-pictures/${profileData.id}/profile`}
         />
         <p>{profileData.display_name}</p>
+        <p>{profileData.bio}</p>
       </div>
     );
   } else {
