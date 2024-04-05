@@ -17,7 +17,6 @@ const ProfilePage = () => {
   const supabase = createClientComponentClient();
   const [isEditable, setIsEditable] = useState(true);
   const { setUser, user } = useUserStore();
-  // console.log(user.user_metadata.userName, "user in profile");
 
   const [localUser, setLocalUser] = useState(null);
   const [userName, setUserName] = useState(null);
@@ -25,16 +24,13 @@ const ProfilePage = () => {
   const router = useRouter();
   // const userId = localStorage.getItem("userId");
   const checkUser = async () => {
-    console.log("check user ran");
     const res = await supabase.auth.getUser();
     if (res.data.user) {
       setLocalUser(res.data.user);
-      setUserName(res.data.user.user_metadata.userName);
+      setUserName(res.data.user.user_metadata.display_name);
       setBio(res.data.user.user_metadata.bio);
     }
   };
-
-  console.log(localUser, "this si the local user");
 
   async function uploadImage(file) {
     try {
@@ -68,7 +64,7 @@ const ProfilePage = () => {
       const { data, error } = await supabase.auth.updateUser({
         data: {
           // Include other metadata properties here
-          userName,
+          display_name: userName,
           bio,
         },
       });

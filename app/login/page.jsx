@@ -22,13 +22,11 @@ const LoginPage = () => {
       const res = await supabase.auth.getUser();
 
       setUser(res.data.user);
-      console.log(user, "in use effect ");
     }
 
     getUser();
   }, []);
 
-  console.log(user, "this is the user");
   const handleSignUp = async () => {
     router.push("/signup");
   };

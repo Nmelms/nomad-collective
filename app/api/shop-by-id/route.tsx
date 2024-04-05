@@ -14,7 +14,6 @@ export async function GET(request: NextRequest) {
       .single();
 
     if (error) {
-      console.log("there was an error");
       return null;
     }
     return data;
