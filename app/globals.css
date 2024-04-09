@@ -337,3 +337,45 @@ main {
   margin-right: 0;
   font-size: 16px;
 }
+
+/* visitng profile styles */
+
+.user-profile {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100dvh;
+  width: 100vw;
+  background-color: white;
+  z-index: 2;
+}
+.stat-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  padding: 1.5rem 1rem 0 1rem;
+}
+.stat-number {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+.stat-title {
+  opacity: 0.6;
+}
+.bio-block {
+  position: relative;
+  border: 1px solid lightgray;
+  min-height: 40vh;
+  width: 80vw;
+  margin-top: 2rem;
+  bottom: 1rem;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.back-btn {
+  margin-left: 0;
+  margin-right: auto;
+  padding-left: 2rem;
+  padding-top: 1.5rem;
+}

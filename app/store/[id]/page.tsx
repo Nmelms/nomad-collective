@@ -22,7 +22,6 @@ const page = async ({ params }: PageProps) => {
   }
 
   let shopData = await fetchShopById(params.id);
-  console.log(shopData, "this is the shopData");
   return (
     <div className="coffee-shop-page d-flex flex-column ">
       <Link href="/">

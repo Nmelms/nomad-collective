@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import Accordion from "react-bootstrap/Accordion";
 import { Form } from "react-bootstrap";
+import BackBtn from "../components/BackBtn";
 
 const ProfilePage = () => {
   useEffect(() => {
@@ -17,7 +18,6 @@ const ProfilePage = () => {
   const supabase = createClientComponentClient();
   const [isEditable, setIsEditable] = useState(true);
   const { setUser, user } = useUserStore();
-  // console.log(user.user_metadata.userName, "user in profile");
 
   const [localUser, setLocalUser] = useState(null);
   const [userName, setUserName] = useState(null);
@@ -25,16 +25,13 @@ const ProfilePage = () => {
   const router = useRouter();
   // const userId = localStorage.getItem("userId");
   const checkUser = async () => {
-    console.log("check user ran");
     const res = await supabase.auth.getUser();
     if (res.data.user) {
       setLocalUser(res.data.user);
-      setUserName(res.data.user.user_metadata.userName);
+      setUserName(res.data.user.user_metadata.display_name);
       setBio(res.data.user.user_metadata.bio);
     }
   };
-
-  console.log(localUser, "this si the local user");
 
   async function uploadImage(file) {
     try {
@@ -46,7 +43,7 @@ const ProfilePage = () => {
       }
       const res = await supabase.storage
         .from("profile-pictures")
-        .upload(`${localUser.id}/${file.name}`, file, {
+        .upload(`${localUser.id}/profile`, file, {
           cacheControl: "3600",
           upsert: false,
         });
@@ -68,7 +65,7 @@ const ProfilePage = () => {
       const { data, error } = await supabase.auth.updateUser({
         data: {
           // Include other metadata properties here
-          userName,
+          display_name: userName,
           bio,
         },
       });
@@ -95,6 +92,7 @@ const ProfilePage = () => {
   if (localUser) {
     return (
       <div className="profile-page d-flex flex-column align-items-center">
+        <BackBtn />
         <div className="profile-picture-wrapper mt-5">
           <img
             className="profile-picture"
