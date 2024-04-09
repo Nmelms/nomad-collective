@@ -58,6 +58,12 @@ const page = async ({ params }: PageProps) => {
         src={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/pin-s+999(${shopData.lng},${shopData.lat})/${shopData.lng},${shopData.lat},15/400x400?access_token=${process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}`}
         alt="Map"
       />
+      {shopData.contributor && (
+        <a href={`../user/${shopData.contributor}`}>
+          <span>{shopData.contributor}</span>
+        </a>
+      )}
+
       <p className="description-text">
         Lorem ipsum, dolor sit amet consectetur adipisicing elit. Incidunt nihil
         laudantium et facere! Dolorem excepturi nam magnam ducimus recusandae

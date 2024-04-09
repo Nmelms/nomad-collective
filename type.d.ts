@@ -10,6 +10,7 @@ interface ShopFormData {
   zip: string;
   description: string;
   imageURL: string;
+  contributor: string;
 }
 
 interface DatabaseShopData {

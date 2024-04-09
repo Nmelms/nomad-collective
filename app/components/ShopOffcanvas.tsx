@@ -1,14 +1,30 @@
-import React, { FormEventHandler, useState } from "react";
+"use client";
+import React, { FormEventHandler, useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import useUserStore from "../useUserStore";
 import Form from "react-bootstrap/Form";
 import { supabase } from "../lib/supabaseClient";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 function ShopOffcanvas() {
+  const supabase = createClientComponentClient();
   const { showOffcanvas, setShowOffcanvas } = useUserStore();
   const [imageURL, setImageURL] = useState("");
   const [show, setShow] = useState(showOffcanvas);
+  const [user, setUser] = useState<any | null>(null);
+
+  // checks if there is a user to attribute when adding a new location
+  useEffect(() => {
+    const checkUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user?.user_metadata.display_name);
+    };
+
+    checkUser();
+  }, []);
 
   const handleClose = () => setShowOffcanvas(false);
 
@@ -41,6 +57,7 @@ function ShopOffcanvas() {
       zip: form.zip.value,
       description: form.details.value,
       imageURL: imageURL,
+      contributor: user,
     };
 
     fetch("/api/shop-data", {
@@ -100,3 +117,6 @@ function ShopOffcanvas() {
 }
 
 export default ShopOffcanvas;
+function checkUser() {
+  throw new Error("Function not implemented.");
+}
