@@ -2,6 +2,7 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import BackBtn from "../../components/BackBtn";
 
 const supabase = createClientComponentClient();
 
@@ -30,6 +31,7 @@ const UserProfile = ({ params }) => {
     return (
       <div className="user-profile d-flex flex-column align-items-center">
         <div className="profile-picture-wrapper mt-5">
+          <BackBtn />
           <Image
             className="profile-picture"
             width={200}

@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import Accordion from "react-bootstrap/Accordion";
 import { Form } from "react-bootstrap";
+import BackBtn from "../components/BackBtn";
 
 const ProfilePage = () => {
   useEffect(() => {
@@ -91,6 +92,7 @@ const ProfilePage = () => {
   if (localUser) {
     return (
       <div className="profile-page d-flex flex-column align-items-center">
+        <BackBtn />
         <div className="profile-picture-wrapper mt-5">
           <img
             className="profile-picture"
