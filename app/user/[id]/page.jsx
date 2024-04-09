@@ -30,8 +30,8 @@ const UserProfile = ({ params }) => {
   if (profileData) {
     return (
       <div className="user-profile d-flex flex-column align-items-center">
+        <BackBtn />
         <div className="profile-picture-wrapper mt-5">
-          <BackBtn />
           <Image
             className="profile-picture"
             width={200}

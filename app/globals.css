@@ -295,6 +295,7 @@ main {
 /* profile page styles */
 
 .profile-page {
+  overflow-y: auto;
   position: absolute;
   top: 0;
   left: 0;
@@ -341,6 +342,7 @@ main {
 /* visitng profile styles */
 
 .user-profile {
+  overflow-y: auto;
   position: absolute;
   top: 0;
   left: 0;
@@ -378,4 +380,5 @@ main {
   margin-right: auto;
   padding-left: 2rem;
   padding-top: 1.5rem;
+  cursor: pointer;
 }
