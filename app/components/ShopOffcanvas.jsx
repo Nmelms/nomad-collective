@@ -10,9 +10,9 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 function ShopOffcanvas() {
   const supabase = createClientComponentClient();
   const { showOffcanvas, setShowOffcanvas } = useUserStore();
-  const [imageURL, setImageURL] = useState("");
+  const [imageURLS, setImageURLS] = useState([]);
   const [show, setShow] = useState(showOffcanvas);
-  const [user, setUser] = useState<any | null>(null);
+  const [user, setUser] = useState(null);
 
   // checks if there is a user to attribute when adding a new location
   useEffect(() => {
@@ -28,35 +28,48 @@ function ShopOffcanvas() {
 
   const handleClose = () => setShowOffcanvas(false);
 
-  async function uploadImage(file: File): Promise<UploadResponse> {
-    const { data, error } = await supabase.storage
-      .from("coffee-shop-images")
-      .upload(`${file.name}`, file, {
-        cacheControl: "3600",
-        upsert: false,
-      });
+  async function uploadImages(files) {
+    console.log(typeof files, files);
+    console.log(typeof files, "these are the files");
 
-    return data as UploadResponse;
+    const uploadPromises = files.map((file) => {
+      console.log(file);
+      return supabase.storage
+        .from("coffee-shop-images")
+        .upload(`${file.name}`, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+    });
+
+    const results = await Promise.all(uploadPromises);
+    console.log(results, "thsse are the resutls");
+
+    const uploadResponses = [];
+    results.map((result) => uploadResponses.push(result.data.fullPath));
+    setImageURLS(uploadResponses);
   }
-
-  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    console.log(imageURLS);
+  }, [imageURLS]);
+  const handleImageChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
-      let url = await uploadImage(e.target.files[0]);
-      setImageURL(url.fullPath);
+      let files = Array.from(e.target.files);
+      let url = await uploadImages(files);
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const form = e.target as HTMLFormElement;
-    const formData: ShopFormData = {
+    const form = e.target;
+    const formData = {
       name: form.InputName.value,
       street: form.street.value,
       city: form.city.value,
       state: form.state.value,
       zip: form.zip.value,
       description: form.details.value,
-      imageURL: imageURL,
+      imageURLS: imageURLS,
       contributor: user,
     };
 
@@ -100,7 +113,10 @@ function ShopOffcanvas() {
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="image">
-            <Form.Label>Shop Image</Form.Label>
+            <Form.Label>
+              Location images.
+              <br /> Feel free to upload multiple images
+            </Form.Label>
             <Form.Control type="file" onChange={handleImageChange} multiple />
           </Form.Group>
 

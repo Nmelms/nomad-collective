@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     state: data.state,
     zip: data.zip,
     description: data.description,
-    imageURL: data.imageURL,
+    imageURLS: data.imageURLS,
     contributor: data.contributor,
   };
 

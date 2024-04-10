@@ -20,7 +20,7 @@ interface DatabaseShopData {
   type: string;
   geometry?: string;
   geometry_type?: string;
-  imageURL: string;
+  imageURLS: Array;
   lat: number;
   lng: number;
   name: string;
