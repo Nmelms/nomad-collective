@@ -101,7 +101,7 @@ function ShopOffcanvas() {
 
           <Form.Group className="mb-3" controlId="image">
             <Form.Label>Shop Image</Form.Label>
-            <Form.Control type="file" onChange={handleImageChange} />
+            <Form.Control type="file" onChange={handleImageChange} multiple />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="details">
