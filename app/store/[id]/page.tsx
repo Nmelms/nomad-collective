@@ -24,14 +24,6 @@ const page = async ({ params }: PageProps) => {
   }
 
   let shopData = await fetchShopById(params.id);
-  if (shopData) {
-    arr = JSON.parse(shopData.imageURLS);
-    arr.map((item: any) => {
-      console.log(item, "tiems");
-    });
-    console.log(arr);
-    console.log(typeof arr, "image url");
-  }
   return (
     <div className="coffee-shop-page d-flex flex-column ">
       <Link href="/">
