@@ -10,6 +10,7 @@ interface ShopFormData {
   zip: string;
   description: string;
   imageURL: string;
+  contributor: string;
 }
 
 interface DatabaseShopData {
@@ -19,7 +20,7 @@ interface DatabaseShopData {
   type: string;
   geometry?: string;
   geometry_type?: string;
-  imageURL: string;
+  imageURLS: Array;
   lat: number;
   lng: number;
   name: string;

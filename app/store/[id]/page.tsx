@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { faCoffee, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
@@ -7,6 +8,7 @@ import Image from "next/image";
 import { supabase } from "../../lib/supabaseClient";
 
 const page = async ({ params }: PageProps) => {
+  let arr = [];
   async function fetchShopById(shopId: number) {
     const { data, error } = await supabase
       .from("locations")
@@ -34,14 +36,17 @@ const page = async ({ params }: PageProps) => {
       <FontAwesomeIcon size="2x" className="" icon={faCoffee} />
       <h2 className="text-center pt-4">{shopData?.name}</h2>
       <div className="store-image-wrapper">
-        <Image
-          src={`https://xlvjgjhetfrtaigrimtd.supabase.co/storage/v1/object/public/${shopData?.imageURL}
-`}
-          alt=""
-          className="store-image"
-          height={500}
-          width={500}
-        />
+        {shopData &&
+          arr.map((url: any) => (
+            <Image
+              src={`https://xlvjgjhetfrtaigrimtd.supabase.co/storage/v1/object/public/${url}`}
+              alt=""
+              className="store-image"
+              height={500}
+              width={500}
+            />
+          ))}
+
         <FontAwesomeIcon size="2x" className="heart-icon" icon={faHeart} />
       </div>
 
@@ -58,6 +63,12 @@ const page = async ({ params }: PageProps) => {
         src={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/pin-s+999(${shopData.lng},${shopData.lat})/${shopData.lng},${shopData.lat},15/400x400?access_token=${process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}`}
         alt="Map"
       />
+      {shopData.contributor && (
+        <a href={`../user/${shopData.contributor}`}>
+          <span>{shopData.contributor}</span>
+        </a>
+      )}
+
       <p className="description-text">
         Lorem ipsum, dolor sit amet consectetur adipisicing elit. Incidunt nihil
         laudantium et facere! Dolorem excepturi nam magnam ducimus recusandae

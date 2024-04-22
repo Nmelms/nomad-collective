@@ -122,6 +122,7 @@ main {
   height: 10dvh;
 }
 .coffee-shop-page {
+  overflow-y: auto;
   position: absolute;
   z-index: 10;
   top: 0;

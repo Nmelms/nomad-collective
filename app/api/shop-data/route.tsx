@@ -4,6 +4,7 @@ import { NextApiResponse } from "next";
 
 export async function POST(req: NextRequest) {
   let data = await req.json();
+  console.log(data, "this si the incomming data");
   let geoJSON = {
     type: "Feature",
     geomentry_type: "Point",
@@ -15,7 +16,8 @@ export async function POST(req: NextRequest) {
     state: data.state,
     zip: data.zip,
     description: data.description,
-    imageURL: data.imageURL,
+    imageURLS: data.imageURLS,
+    contributor: data.contributor,
   };
 
   const insertDataToSupabase = async (geoJSON: DatabaseShopData) => {

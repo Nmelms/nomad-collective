@@ -113,7 +113,8 @@
     "**/*.tsx",
     "app/useUserStore.jsx",
     "app/login/page.jsx",
-    "app/profile/page.jsx"
+    "app/profile/page.jsx",
+    "app/components/ShopOffcanvas.jsx"
   ],
   "exclude": ["node_modules"]
 }
