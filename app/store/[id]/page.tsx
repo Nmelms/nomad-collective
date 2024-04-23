@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { faCoffee, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
@@ -6,9 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import Image from "next/image";
 import { supabase } from "../../lib/supabaseClient";
+import LocationCarousel from "../../components/LocationCarousel.jsx";
 
 const page = async ({ params }: PageProps) => {
-  let arr = [];
+  let arr: any[] = [];
   async function fetchShopById(shopId: number) {
     const { data, error } = await supabase
       .from("locations")
@@ -24,6 +24,8 @@ const page = async ({ params }: PageProps) => {
   }
 
   let shopData = await fetchShopById(params.id);
+  let imageURLs = JSON.parse(shopData.imageURLS);
+  console.log(imageURLs, "these are the urls");
   return (
     <div className="coffee-shop-page d-flex flex-column ">
       <Link href="/">
@@ -36,17 +38,7 @@ const page = async ({ params }: PageProps) => {
       <FontAwesomeIcon size="2x" className="" icon={faCoffee} />
       <h2 className="text-center pt-4">{shopData?.name}</h2>
       <div className="store-image-wrapper">
-        {shopData &&
-          arr.map((url: any) => (
-            <Image
-              src={`https://xlvjgjhetfrtaigrimtd.supabase.co/storage/v1/object/public/${url}`}
-              alt=""
-              className="store-image"
-              height={500}
-              width={500}
-            />
-          ))}
-
+        <LocationCarousel imageURLs={imageURLs} />
         <FontAwesomeIcon size="2x" className="heart-icon" icon={faHeart} />
       </div>
 
