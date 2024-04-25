@@ -41,7 +41,6 @@ const page = async ({ params }: PageProps) => {
         <LocationCarousel imageURLs={imageURLs} />
         <FontAwesomeIcon size="2x" className="heart-icon" icon={faHeart} />
       </div>
-
       <a
         href={`https://www.google.com/maps/?q=${shopData.lat},${shopData.lng}`}
         target="_blank"
