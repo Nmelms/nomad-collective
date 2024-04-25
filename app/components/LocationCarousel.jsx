@@ -12,6 +12,7 @@ const LocationCarousel = ({ imageURLs }) => {
 
   return (
     <Carousel
+      controls={indicators}
       indicators={indicators}
       interval={null}
       className="location-carousel"
@@ -19,7 +20,7 @@ const LocationCarousel = ({ imageURLs }) => {
       {imageURLs.length < 1 && (
         <Carousel.Item>
           <Image
-            className="carousel-image"
+            className="carousel-image px-3"
             src={noImage}
             alt={"no image"}
             height={300}
@@ -31,7 +32,7 @@ const LocationCarousel = ({ imageURLs }) => {
         imageURLs.map((imageURL, index) => (
           <Carousel.Item key={index}>
             <Image
-              className="carousel-image"
+              className="carousel-image px-3 "
               src={`https://xlvjgjhetfrtaigrimtd.supabase.co/storage/v1/object/public/${imageURL}`}
               alt={`Slide ${index + 1}`}
               height={300}
