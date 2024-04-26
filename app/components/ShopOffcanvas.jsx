@@ -1,5 +1,6 @@
 "use client";
 import React, { FormEventHandler, useState, useEffect } from "react";
+import { Accordion } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import useUserStore from "../useUserStore";
@@ -88,45 +89,69 @@ function ShopOffcanvas() {
   return (
     <Offcanvas show={showOffcanvas} onHide={handleClose}>
       <Offcanvas.Header closeButton>
-        <Offcanvas.Title>Add A Shop</Offcanvas.Title>
+        <Offcanvas.Title>Add A Location</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body>
-        <Form onSubmit={(e) => handleSubmit(e)}>
-          <Form.Group className="mb-3" controlId="InputName">
-            <Form.Control type="text" placeholder="Name" />
-          </Form.Group>
+        <Accordion defaultActiveKey="0">
+          <Accordion.Item eventKey="0">
+            <Accordion.Header>Add by address</Accordion.Header>
+            <Accordion.Body>
+              <Form onSubmit={(e) => handleSubmit(e)}>
+                <Form.Group className="mb-3" controlId="InputName">
+                  <Form.Control type="text" placeholder="Name" />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="street">
+                  <Form.Control type="text" placeholder="Street address" />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="city">
+                  <Form.Control type="text" placeholder="City" />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="state">
+                  <Form.Control type="text" placeholder="State" />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="zip">
+                  <Form.Control type="text" placeholder="Zip code" />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="image">
+                  <Form.Label>
+                    Location images.
+                    <br /> Feel free to upload multiple images
+                  </Form.Label>
+                  <Form.Control
+                    type="file"
+                    onChange={handleImageChange}
+                    multiple
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="details">
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    placeholder="Enter details"
+                  />
+                </Form.Group>
+                <Button variant="primary" type="submit">
+                  Submit
+                </Button>
+              </Form>
+            </Accordion.Body>
+          </Accordion.Item>
+          <Accordion.Header>Add by Current Location</Accordion.Header>
+          <Accordion.Body>
+            <Form onSubmit={(e) => handleSubmit(e)}>
+              <Form.Group className="mb-3" controlId="InputName">
+                <Form.Control type="text" placeholder="Name" />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="street">
+                <Form.Control type="text" placeholder="Street address" />
+              </Form.Group>
 
-          <Form.Group className="mb-3" controlId="street">
-            <Form.Control type="text" placeholder="Street address" />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="city">
-            <Form.Control type="text" placeholder="City" />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="state">
-            <Form.Control type="text" placeholder="State" />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="zip">
-            <Form.Control type="text" placeholder="Zip code" />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="image">
-            <Form.Label>
-              Location images.
-              <br /> Feel free to upload multiple images
-            </Form.Label>
-            <Form.Control type="file" onChange={handleImageChange} multiple />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="details">
-            <Form.Control as="textarea" rows={3} placeholder="Enter details" />
-          </Form.Group>
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
-        </Form>
+              <Button variant="primary" type="submit">
+                Submit
+              </Button>
+            </Form>
+          </Accordion.Body>
+        </Accordion>
       </Offcanvas.Body>
     </Offcanvas>
   );
