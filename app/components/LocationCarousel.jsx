@@ -7,7 +7,7 @@ import Image from "next/image";
 const LocationCarousel = ({ imageURLs }) => {
   const [indicators, setIndicators] = useState(false);
   useEffect(() => {
-    imageURLs.length > 0 ? setIndicators(true) : setIndicators(false);
+    imageURLs?.length > 0 ? setIndicators(true) : setIndicators(false);
   }, [imageURLs]);
 
   return (
@@ -17,7 +17,7 @@ const LocationCarousel = ({ imageURLs }) => {
       interval={null}
       className="location-carousel"
     >
-      {imageURLs.length < 1 && (
+      {imageURLs?.length < 1 && (
         <Carousel.Item>
           <Image
             className="carousel-image px-3"
@@ -28,8 +28,8 @@ const LocationCarousel = ({ imageURLs }) => {
           />
         </Carousel.Item>
       )}
-      {imageURLs.length > 0 &&
-        imageURLs.map((imageURL, index) => (
+      {imageURLs?.length > 0 &&
+        imageURLs?.map((imageURL, index) => (
           <Carousel.Item key={index}>
             <Image
               className="carousel-image px-3 "

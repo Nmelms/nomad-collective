@@ -24,8 +24,11 @@ const page = async ({ params }: PageProps) => {
   }
 
   let shopData = await fetchShopById(params.id);
-  let imageURLs = JSON.parse(shopData.imageURLS);
-  console.log(imageURLs, "these are the urls");
+  let imageURLs;
+  if (shopData.imageURLS) {
+    imageURLs = JSON.parse(shopData.imageURLS);
+  }
+
   return (
     <div className="coffee-shop-page d-flex flex-column ">
       <Link href="/">
