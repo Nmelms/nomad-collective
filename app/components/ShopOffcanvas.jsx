@@ -91,6 +91,8 @@ function ShopOffcanvas() {
         name: form.InputName.value,
         lat: userLocation[0],
         lng: userLocation[1],
+        description: form.details.value,
+        contributor: user,
       };
       fetch("/api/add-by-location", {
         method: "POST",
@@ -107,9 +109,7 @@ function ShopOffcanvas() {
 
   const handleLocationClick = () => {
     navigator.geolocation.getCurrentPosition(function (position) {
-      // Success callback
       setUserLocation([position.coords.latitude, position.coords.longitude]);
-      // You can use the latitude and longitude values as needed
     });
   };
 
@@ -172,6 +172,13 @@ function ShopOffcanvas() {
             <Form onSubmit={(e) => handleSubmit(e, "location")}>
               <Form.Group className="mb-3" controlId="InputName">
                 <Form.Control type="text" placeholder="Name" />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="details">
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  placeholder="Enter details"
+                />
               </Form.Group>
               <Button
                 onClick={handleLocationClick}
