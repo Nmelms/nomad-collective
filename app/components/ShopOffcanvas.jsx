@@ -14,6 +14,7 @@ function ShopOffcanvas() {
   const [imageURLS, setImageURLS] = useState([]);
   const [show, setShow] = useState(showOffcanvas);
   const [user, setUser] = useState(null);
+  const [userLocation, setUserLocation] = useState([]);
 
   // checks if there is a user to attribute when adding a new location
   useEffect(() => {
@@ -60,31 +61,61 @@ function ShopOffcanvas() {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, type) => {
     e.preventDefault();
     const form = e.target;
-    const formData = {
-      name: form.InputName.value,
-      street: form.street.value,
-      city: form.city.value,
-      state: form.state.value,
-      zip: form.zip.value,
-      description: form.details.value,
-      imageURLS: imageURLS,
-      contributor: user,
-    };
+    if (type === "address") {
+      const formData = {
+        name: form.InputName.value,
+        street: form.street.value,
+        city: form.city.value,
+        state: form.state.value,
+        zip: form.zip.value,
+        description: form.details.value,
+        imageURLS: imageURLS,
+        contributor: user,
+      };
 
-    fetch("/api/shop-data", {
-      method: "POST",
-      cache: "no-store",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then(() => setShowOffcanvas(false))
-      .catch((error) => console.log(error, "iin off canvas"));
+      fetch("/api/shop-data", {
+        method: "POST",
+        cache: "no-store",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+        .then(() => setShowOffcanvas(false))
+        .catch((error) => console.log(error, "iin off canvas"));
+    } else if (type === "location") {
+      const formData = {
+        name: form.InputName.value,
+        lat: userLocation[0],
+        lng: userLocation[1],
+      };
+      fetch("/api/add-by-location", {
+        method: "POST",
+        cache: "no-store",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+        .then(() => setShowOffcanvas(false))
+        .catch((error) => console.log(error, "iin off canvas"));
+    }
   };
+
+  const handleLocationClick = () => {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      // Success callback
+      setUserLocation([position.coords.latitude, position.coords.longitude]);
+      // You can use the latitude and longitude values as needed
+    });
+  };
+
+  useEffect(() => {
+    console.log(userLocation);
+  }, [userLocation]);
 
   return (
     <Offcanvas show={showOffcanvas} onHide={handleClose}>
@@ -96,7 +127,7 @@ function ShopOffcanvas() {
           <Accordion.Item eventKey="0">
             <Accordion.Header>Add by address</Accordion.Header>
             <Accordion.Body>
-              <Form onSubmit={(e) => handleSubmit(e)}>
+              <Form onSubmit={(e) => handleSubmit(e, "address")}>
                 <Form.Group className="mb-3" controlId="InputName">
                   <Form.Control type="text" placeholder="Name" />
                 </Form.Group>
@@ -138,13 +169,17 @@ function ShopOffcanvas() {
           </Accordion.Item>
           <Accordion.Header>Add by Current Location</Accordion.Header>
           <Accordion.Body>
-            <Form onSubmit={(e) => handleSubmit(e)}>
+            <Form onSubmit={(e) => handleSubmit(e, "location")}>
               <Form.Group className="mb-3" controlId="InputName">
                 <Form.Control type="text" placeholder="Name" />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="street">
-                <Form.Control type="text" placeholder="Street address" />
-              </Form.Group>
+              <Button
+                onClick={handleLocationClick}
+                variant="primary"
+                type="button"
+              >
+                Current Location
+              </Button>
 
               <Button variant="primary" type="submit">
                 Submit
