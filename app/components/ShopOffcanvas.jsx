@@ -1,5 +1,5 @@
 "use client";
-import React, { FormEventHandler, useState, useEffect } from "react";
+import React, { FormEventHandler, useState, useEffect, useRef } from "react";
 import { Accordion } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
@@ -17,7 +17,7 @@ function ShopOffcanvas() {
   const [show, setShow] = useState(showOffcanvas);
   const [user, setUser] = useState(null);
   const [userLocation, setUserLocation] = useState([]);
-
+  const crosshairRef = useRef(null);
   // checks if there is a user to attribute when adding a new location
   useEffect(() => {
     const checkUser = async () => {
@@ -110,7 +110,9 @@ function ShopOffcanvas() {
   };
 
   const handleLocationClick = () => {
+    crosshairRef.current.classList.add("spin");
     navigator.geolocation.getCurrentPosition(function (position) {
+      crosshairRef.current.classList.remove("spin");
       setUserLocation([position.coords.latitude, position.coords.longitude]);
     });
   };
@@ -189,6 +191,8 @@ function ShopOffcanvas() {
                   <p className="m-0"> Use My current location</p>
                   <div className="location-button">
                     <FontAwesomeIcon
+                      ref={crosshairRef}
+                      className="location-crosshair"
                       onClick={handleLocationClick}
                       variant="primary"
                       type="button"
