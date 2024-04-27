@@ -7,6 +7,8 @@ import useUserStore from "../useUserStore";
 import Form from "react-bootstrap/Form";
 import { supabase } from "../lib/supabaseClient";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLocationCrosshairs } from "@fortawesome/free-solid-svg-icons";
 
 function ShopOffcanvas() {
   const supabase = createClientComponentClient();
@@ -183,13 +185,17 @@ function ShopOffcanvas() {
                     placeholder="Enter details"
                   />
                 </Form.Group>
-                <Button
-                  onClick={handleLocationClick}
-                  variant="primary"
-                  type="button"
-                >
-                  Current Location
-                </Button>
+                <div className="use-location-wrapper">
+                  <p className="m-0"> Use My current location</p>
+                  <div className="location-button">
+                    <FontAwesomeIcon
+                      onClick={handleLocationClick}
+                      variant="primary"
+                      type="button"
+                      icon={faLocationCrosshairs}
+                    />
+                  </div>
+                </div>
 
                 <Button variant="primary" type="submit">
                   Submit
