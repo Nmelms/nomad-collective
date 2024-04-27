@@ -123,7 +123,8 @@ function ShopOffcanvas() {
         <Offcanvas.Title>Add A Location</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body>
-        <Accordion defaultActiveKey="0">
+        <Accordion>
+          {/* add by address */}
           <Accordion.Item eventKey="0">
             <Accordion.Header>Add by address</Accordion.Header>
             <Accordion.Body>
@@ -167,32 +168,35 @@ function ShopOffcanvas() {
               </Form>
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Header>Add by Current Location</Accordion.Header>
-          <Accordion.Body>
-            <Form onSubmit={(e) => handleSubmit(e, "location")}>
-              <Form.Group className="mb-3" controlId="InputName">
-                <Form.Control type="text" placeholder="Name" />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="details">
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  placeholder="Enter details"
-                />
-              </Form.Group>
-              <Button
-                onClick={handleLocationClick}
-                variant="primary"
-                type="button"
-              >
-                Current Location
-              </Button>
+          {/* add by location */}
+          <Accordion.Item>
+            <Accordion.Header>Add by Current Location</Accordion.Header>
+            <Accordion.Body>
+              <Form onSubmit={(e) => handleSubmit(e, "location")}>
+                <Form.Group className="mb-3" controlId="InputName">
+                  <Form.Control type="text" placeholder="Name" />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="details">
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    placeholder="Enter details"
+                  />
+                </Form.Group>
+                <Button
+                  onClick={handleLocationClick}
+                  variant="primary"
+                  type="button"
+                >
+                  Current Location
+                </Button>
 
-              <Button variant="primary" type="submit">
-                Submit
-              </Button>
-            </Form>
-          </Accordion.Body>
+                <Button variant="primary" type="submit">
+                  Submit
+                </Button>
+              </Form>
+            </Accordion.Body>
+          </Accordion.Item>
         </Accordion>
       </Offcanvas.Body>
     </Offcanvas>
