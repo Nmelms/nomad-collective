@@ -399,3 +399,26 @@ main {
 .carousel-indicators button {
   background-color: black !important;
 }
+
+.use-location-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.spin {
+  animation: spin 1.5s linear infinite;
+}
+.location-button {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid red;
+  background-color: #0d6efd;
+  border-radius: 5px;
+}
