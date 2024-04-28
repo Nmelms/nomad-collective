@@ -8,7 +8,11 @@ import Form from "react-bootstrap/Form";
 import { supabase } from "../lib/supabaseClient";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLocationCrosshairs } from "@fortawesome/free-solid-svg-icons";
+import {
+  faLocationCrosshairs,
+  faCheck,
+  faX,
+} from "@fortawesome/free-solid-svg-icons";
 
 function ShopOffcanvas() {
   const supabase = createClientComponentClient();
@@ -17,6 +21,7 @@ function ShopOffcanvas() {
   const [show, setShow] = useState(showOffcanvas);
   const [user, setUser] = useState(null);
   const [userLocation, setUserLocation] = useState([]);
+  const [locationIcon, setLocationIcon] = useState(faLocationCrosshairs);
   const crosshairRef = useRef(null);
   // checks if there is a user to attribute when adding a new location
   useEffect(() => {
@@ -111,10 +116,17 @@ function ShopOffcanvas() {
 
   const handleLocationClick = () => {
     crosshairRef.current.classList.add("spin");
-    navigator.geolocation.getCurrentPosition(function (position) {
-      crosshairRef.current.classList.remove("spin");
-      setUserLocation([position.coords.latitude, position.coords.longitude]);
-    });
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        crosshairRef.current.classList.remove("spin");
+        setLocationIcon(faCheck);
+        setUserLocation([position.coords.latitude, position.coords.longitude]);
+      },
+      (error) => {
+        setLocationIcon(faX);
+        crosshairRef.current.classList.remove("spin");
+      }
+    );
   };
 
   useEffect(() => {
@@ -196,7 +208,7 @@ function ShopOffcanvas() {
                       onClick={handleLocationClick}
                       variant="primary"
                       type="button"
-                      icon={faLocationCrosshairs}
+                      icon={locationIcon}
                     />
                   </div>
                 </div>
