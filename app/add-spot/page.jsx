@@ -10,8 +10,8 @@ import { Form, Button } from "react-bootstrap";
 
 const AddSpotPage = () => {
   const [locationIcon, setLocationIcon] = useState(faLocationCrosshairs);
-  const [userLat, setUserLat] = useState(null);
-  const [userLng, setUserLng] = useState(null);
+  const [userLat, setUserLat] = useState("");
+  const [userLng, setUserLng] = useState("");
   const crosshairRef = useRef(null);
 
   const handleLocationClick = (e) => {
