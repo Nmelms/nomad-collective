@@ -79,6 +79,16 @@
   margin: 0;
 }
 
+.page-on-top {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  height: 100dvh;
+  width: 100vw;
+  background-color: white;
+}
+
 html,
 body {
   max-width: 100vw;
@@ -421,4 +431,38 @@ main {
   border: 1px solid red;
   background-color: #0d6efd;
   border-radius: 5px;
+}
+
+/* add Spot Page */
+
+.styled-input {
+  position: relative;
+  border: none;
+  background-color: transparent;
+  z-index: 2;
+  border-bottom: 1px solid orange;
+  outline: none;
+}
+.input-wrapper {
+  position: relative;
+  justify-content: flex-start;
+}
+.input-wrapper:focus-within .input-label,
+.styled-input:valid + .input-label {
+  transform: translateY(-100%) scale(0.8);
+  transform-origin: left;
+  color: gray;
+}
+.input-label {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  transition: all 0.3s ease;
+}
+
+.spot-header {
+  display: flex;
+  height: 60px;
+  border-bottom: 1px solid gray;
+  box-shadow: 0px 2px 3px gray;
 }
