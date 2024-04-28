@@ -114,21 +114,6 @@ function ShopOffcanvas() {
     }
   };
 
-  const handleLocationClick = () => {
-    crosshairRef.current.classList.add("spin");
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        crosshairRef.current.classList.remove("spin");
-        setLocationIcon(faCheck);
-        setUserLocation([position.coords.latitude, position.coords.longitude]);
-      },
-      (error) => {
-        setLocationIcon(faX);
-        crosshairRef.current.classList.remove("spin");
-      }
-    );
-  };
-
   useEffect(() => {
     console.log(userLocation);
   }, [userLocation]);
