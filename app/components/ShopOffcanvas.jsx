@@ -190,7 +190,7 @@ function ShopOffcanvas() {
                     <FontAwesomeIcon
                       ref={crosshairRef}
                       className="location-crosshair"
-                      onClick={handleLocationClick}
+                      // onClick={handleLocationClick}
                       variant="primary"
                       type="button"
                       icon={locationIcon}

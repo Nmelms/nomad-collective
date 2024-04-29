@@ -33,7 +33,7 @@ const AddSpotPage = () => {
   };
 
   return (
-    <div className="add-spot-page page-on-top ">
+    <div className="add-spot-page ">
       <div className="spot-header d-flex align-items-center">
         <h2 className="ps-5">Add A Spot</h2>
       </div>

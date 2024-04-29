@@ -17,6 +17,8 @@ const MapboxMap = () => {
     setShowPopup,
     setPopupData,
     popupData,
+    setSpotLocation,
+    spotLocation,
   } = useUserStore();
 
   const mapContainer = useRef(null);
@@ -94,10 +96,15 @@ const MapboxMap = () => {
         router,
         setShowPopup,
         showPopup,
-        setPopupData
+        setPopupData,
+        setSpotLocation
       );
     }
   }, [shopData]);
+
+  useEffect(() => {
+    console.log("spot location:", spotLocation);
+  }, [spotLocation]);
 
   return (
     <div id="map" style={{ height: "90dvh" }}>

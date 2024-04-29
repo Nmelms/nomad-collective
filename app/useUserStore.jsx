@@ -13,9 +13,11 @@ const useUserStore = create((set) => ({
   showPopup: false,
   popupData: {},
   user: null,
+  spotLocation: [],
 
   // actions
   setLocation: (lat, lng) => set({ lat, lng }),
+  setSpotLocation: (spotLocation) => set({ spotLocation }),
   setSpinning: (spinning) => set({ spinning }),
   setShowOffcanvas: (showOffcanvas) => set({ showOffcanvas }),
   isUserSet: (isUserSet) => set({ isUserSet }),

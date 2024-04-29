@@ -10,7 +10,8 @@ const initMap = (
   router: AppRouterInstance,
   setShowPopup: (arg0: boolean) => void,
   showPopup: boolean,
-  setPopupData: (arg0: any) => PopupStoreProps
+  setPopupData: (arg0: any) => PopupStoreProps,
+  setSpotLocation: any
 ) => {
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
@@ -108,7 +109,11 @@ const initMap = (
 
     setShowPopup(false);
   });
-
+  map.on("mousemove", (e) => {
+    const { lng, lat } = e.lngLat.wrap();
+    setSpotLocation([lng, lat]);
+    console.log([lng, lat]);
+  });
   map.on(
     "click",
     "clusters",
