@@ -1,7 +1,7 @@
 "use client";
 import React, { FormEventHandler, useState, useEffect, useRef } from "react";
-import { Accordion } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
+import useLocationStore from "../useLocationStore";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import useUserStore from "../useUserStore";
 import Form from "react-bootstrap/Form";
@@ -17,13 +17,13 @@ import {
 
 function ShopOffcanvas() {
   const supabase = createClientComponentClient();
+  const { name, setName, lat, lng, setCoords } = useLocationStore();
   const { showOffcanvas, setShowOffcanvas } = useUserStore();
   const [imageURLS, setImageURLS] = useState([]);
   const [show, setShow] = useState(showOffcanvas);
   const [user, setUser] = useState(null);
   const [userLocation, setUserLocation] = useState([]);
-  const [locationIcon, setLocationIcon] = useState(faLocationCrosshairs);
-  const crosshairRef = useRef(null);
+
   // checks if there is a user to attribute when adding a new location
   useEffect(() => {
     const checkUser = async () => {
@@ -62,6 +62,7 @@ function ShopOffcanvas() {
   useEffect(() => {
     console.log(imageURLS);
   }, [imageURLS]);
+
   const handleImageChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
       let files = Array.from(e.target.files);
@@ -115,6 +116,10 @@ function ShopOffcanvas() {
     }
   };
 
+  const handleFindOnMapClick = () => {
+    setShowOffcanvas(false);
+  };
+
   useEffect(() => {
     console.log(userLocation);
   }, [userLocation]);
@@ -131,7 +136,12 @@ function ShopOffcanvas() {
         >
           <Form.Group className="mb-3" controlId="InputName">
             <Form.Label>Spot Name</Form.Label>
-            <Form.Control type="text" placeholder="" />
+            <Form.Control
+              onChange={(e) => setName(e.target.value)}
+              value={name}
+              type="text"
+              placeholder=""
+            />
           </Form.Group>
 
           <Form.Group className="mb-3 " controlId="formLocation">
@@ -141,11 +151,13 @@ function ShopOffcanvas() {
                 className="m-2"
                 type="text"
                 placeholder="Latitude"
+                value={lat}
               />
               <Form.Control
                 className="m-2"
                 type="text"
                 placeholder="Longitude"
+                value={lng}
               />
             </div>
           </Form.Group>
@@ -153,13 +165,17 @@ function ShopOffcanvas() {
             <p>OR</p>
           </div>
 
-          <div className="find-on-map d-flex align-items-center">
+          <div
+            onClick={handleFindOnMapClick}
+            className="find-on-map d-flex align-items-center"
+          >
             <FontAwesomeIcon
               className="ps-4"
               variant="primary"
               size="2x"
               icon={faMap}
             />
+            <p className="m-0 ps-3">Find on map</p>
           </div>
 
           {/* <Form.Group className="mb-3" controlId="street">
