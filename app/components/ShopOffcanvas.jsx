@@ -131,6 +131,9 @@ function ShopOffcanvas() {
         currentMarker = new mapboxgl.Marker().setLngLat(coordinates).addTo(map);
 
         setSpotLocation([event.lngLat.lng, event.lngLat.lat]);
+        setTimeout(() => {
+          setShowOffcanvas(true);
+        }, 750);
       });
     };
 
