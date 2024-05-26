@@ -17,7 +17,8 @@ import {
 
 function ShopOffcanvas() {
   const supabase = createClientComponentClient();
-  const { name, setName, lat, lng, setCoords } = useLocationStore();
+  const { name, setName, lat, lng, setCoords, spotLocation } =
+    useLocationStore();
   const { showOffcanvas, setShowOffcanvas } = useUserStore();
   const [imageURLS, setImageURLS] = useState([]);
   const [show, setShow] = useState(showOffcanvas);
@@ -118,6 +119,9 @@ function ShopOffcanvas() {
 
   const handleFindOnMapClick = () => {
     setShowOffcanvas(false);
+    document.querySelector("#map").addEventListener("click", () => {
+      setShowOffcanvas(true);
+    });
   };
 
   useEffect(() => {
@@ -145,19 +149,19 @@ function ShopOffcanvas() {
           </Form.Group>
 
           <Form.Group className="mb-3 " controlId="formLocation">
-            <Form.Label c>Location Coordinates</Form.Label>
+            <Form.Label>Location Coordinates</Form.Label>
             <div className="d-flex">
               <Form.Control
                 className="m-2"
                 type="text"
                 placeholder="Latitude"
-                value={lat}
+                value={spotLocation[0]}
               />
               <Form.Control
                 className="m-2"
                 type="text"
                 placeholder="Longitude"
-                value={lng}
+                value={spotLocation[1]}
               />
             </div>
           </Form.Group>

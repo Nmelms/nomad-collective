@@ -6,6 +6,7 @@ import Link from "next/link";
 import useUserStore from "../useUserStore";
 import initMap from "../lib/initMap";
 import StorePopup from "./StorePopup";
+import useLocationStore from "../useLocationStore";
 
 const MapboxMap = () => {
   const {
@@ -17,9 +18,8 @@ const MapboxMap = () => {
     setShowPopup,
     setPopupData,
     popupData,
-    setSpotLocation,
-    spotLocation,
   } = useUserStore();
+  const { setSpotLocation, spotLocation } = useLocationStore();
 
   const mapContainer = useRef(null);
   const mapRef = useRef(null);

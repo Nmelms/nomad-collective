@@ -107,13 +107,12 @@ const initMap = (
       return;
     }
 
-    setShowPopup(false);
-  });
-  map.on("mousemove", (e) => {
     const { lng, lat } = e.lngLat.wrap();
     setSpotLocation([lng, lat]);
-    console.log([lng, lat]);
+
+    setShowPopup(false);
   });
+  // map.on("mousemove", (e) => {});
   map.on(
     "click",
     "clusters",
