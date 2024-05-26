@@ -19,7 +19,7 @@ import {
 
 function ShopOffcanvas() {
   const supabase = createClientComponentClient();
-  const { name, setName, lat, lng, setCoords, spotLocation } =
+  const { name, setName, lat, lng, setCoords, spotLocation, setSpotLocation } =
     useLocationStore();
   const { showOffcanvas, setShowOffcanvas } = useUserStore();
   const [imageURLS, setImageURLS] = useState([]);
@@ -124,12 +124,13 @@ function ShopOffcanvas() {
     const handleCoordMapClick = () => {
       let currentMarker;
       map.on("click", (event) => {
-        console.log("HandleMap click event ran");
         const coordinates = [event.lngLat.lng, event.lngLat.lat];
         if (currentMarker) {
           currentMarker.remove();
         }
         currentMarker = new mapboxgl.Marker().setLngLat(coordinates).addTo(map);
+
+        setSpotLocation([event.lngLat.lng, event.lngLat.lat]);
       });
     };
 
