@@ -9,6 +9,8 @@ const useLocationStore = create((set) => ({
 
   // actions,
   setCoords: (lat, lng) => set({ lat, lng }),
+  setLat: (lat) => set({ lat }),
+  setLng: (lng) => set({ lng }),
   setName: (name) => set({ name }),
   setSpotLocation: (spotLocation) => set({ spotLocation }),
 }));

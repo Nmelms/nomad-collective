@@ -19,8 +19,17 @@ import {
 
 function ShopOffcanvas() {
   const supabase = createClientComponentClient();
-  const { name, setName, lat, lng, setCoords, spotLocation, setSpotLocation } =
-    useLocationStore();
+  const {
+    name,
+    setName,
+    lat,
+    lng,
+    setLat,
+    setLng,
+    setCoords,
+    spotLocation,
+    setSpotLocation,
+  } = useLocationStore();
   const { showOffcanvas, setShowOffcanvas } = useUserStore();
   const [imageURLS, setImageURLS] = useState([]);
   const [show, setShow] = useState(showOffcanvas);
@@ -125,12 +134,14 @@ function ShopOffcanvas() {
       let currentMarker;
       map.on("click", (event) => {
         const coordinates = [event.lngLat.lng, event.lngLat.lat];
+
         if (currentMarker) {
           currentMarker.remove();
         }
         currentMarker = new mapboxgl.Marker().setLngLat(coordinates).addTo(map);
 
-        setSpotLocation([event.lngLat.lng, event.lngLat.lat]);
+        setLat(event.lngLat.lat);
+        setLng(event.lngLat.lng);
         setTimeout(() => {
           setShowOffcanvas(true);
         }, 750);
@@ -174,13 +185,15 @@ function ShopOffcanvas() {
                 className="m-2"
                 type="text"
                 placeholder="Latitude"
-                value={spotLocation[0]}
+                value={lat}
+                onChange={(e) => setLat(e.target.value)}
               />
               <Form.Control
                 className="m-2"
                 type="text"
                 placeholder="Longitude"
-                value={spotLocation[1]}
+                value={lng}
+                onChange={(e) => setLng(e.target.value)}
               />
             </div>
           </Form.Group>
