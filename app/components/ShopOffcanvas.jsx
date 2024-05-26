@@ -1,5 +1,7 @@
 "use client";
 import React, { FormEventHandler, useState, useEffect, useRef } from "react";
+import { map } from "../lib/initMap";
+import mapboxgl from "mapbox-gl";
 import Button from "react-bootstrap/Button";
 import useLocationStore from "../useLocationStore";
 import Offcanvas from "react-bootstrap/Offcanvas";
@@ -119,9 +121,22 @@ function ShopOffcanvas() {
 
   const handleFindOnMapClick = () => {
     setShowOffcanvas(false);
-    document.querySelector("#map").addEventListener("click", () => {
-      setShowOffcanvas(true);
-    });
+    const handleCoordMapClick = () => {
+      let currentMarker;
+      map.on("click", (event) => {
+        console.log("HandleMap click event ran");
+        const coordinates = [event.lngLat.lng, event.lngLat.lat];
+        if (currentMarker) {
+          currentMarker.remove();
+        }
+        currentMarker = new mapboxgl.Marker().setLngLat(coordinates).addTo(map);
+      });
+    };
+
+    document
+      .querySelector("#map")
+      .addEventListener("click", handleCoordMapClick);
+    handleCoordMapClick();
   };
 
   useEffect(() => {
@@ -208,42 +223,6 @@ function ShopOffcanvas() {
             Submit
           </Button>
         </Form>
-
-        {/* add by location */}
-        {/* <Accordion.Item>
-            <Accordion.Header>Add by Current Location</Accordion.Header>
-            <Accordion.Body>
-              <Form onSubmit={(e) => handleSubmit(e, "location")}>
-                <Form.Group className="mb-3" controlId="InputName">
-                  <Form.Control type="text" placeholder="Name" />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="details">
-                  <Form.Control
-                    as="textarea"
-                    rows={3}
-                    placeholder="Enter details"
-                  />
-                </Form.Group>
-                <div className="use-location-wrapper">
-                  <p className="m-0"> Use My current location</p>
-                  <div className="location-button">
-                    <FontAwesomeIcon
-                      ref={crosshairRef}
-                      className="location-crosshair"
-                      // onClick={handleLocationClick}
-                      variant="primary"
-                      type="button"
-                      icon={locationIcon}
-                    />
-                  </div>
-                </div>
-
-                <Button variant="primary" type="submit">
-                  Submit
-                </Button>
-              </Form>
-            </Accordion.Body>
-          </Accordion.Item> */}
       </Offcanvas.Body>
     </Offcanvas>
   );
