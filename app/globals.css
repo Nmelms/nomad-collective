@@ -468,3 +468,9 @@ main {
   border-bottom: 1px solid gray;
   box-shadow: 0px 2px 3px gray;
 }
+
+.find-on-map {
+  height: 50px;
+  width: 200px;
+  background-color: orange;
+}

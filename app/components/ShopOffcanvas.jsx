@@ -12,6 +12,7 @@ import {
   faLocationCrosshairs,
   faCheck,
   faX,
+  faMap,
 } from "@fortawesome/free-solid-svg-icons";
 
 function ShopOffcanvas() {
@@ -121,56 +122,75 @@ function ShopOffcanvas() {
   return (
     <Offcanvas show={showOffcanvas} onHide={handleClose}>
       <Offcanvas.Header closeButton>
-        <Offcanvas.Title>Add A Location</Offcanvas.Title>
+        <Offcanvas.Title>Add A Spot</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body>
-        <Accordion>
-          {/* add by address */}
-          <Accordion.Item eventKey="0">
-            <Accordion.Header>Add by address</Accordion.Header>
-            <Accordion.Body>
-              <Form onSubmit={(e) => handleSubmit(e, "address")}>
-                <Form.Group className="mb-3" controlId="InputName">
-                  <Form.Control type="text" placeholder="Name" />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="street">
-                  <Form.Control type="text" placeholder="Street address" />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="city">
-                  <Form.Control type="text" placeholder="City" />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="state">
-                  <Form.Control type="text" placeholder="State" />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="zip">
-                  <Form.Control type="text" placeholder="Zip code" />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="image">
-                  <Form.Label>
-                    Location images.
-                    <br /> Feel free to upload multiple images
-                  </Form.Label>
-                  <Form.Control
-                    type="file"
-                    onChange={handleImageChange}
-                    multiple
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="details">
-                  <Form.Control
-                    as="textarea"
-                    rows={3}
-                    placeholder="Enter details"
-                  />
-                </Form.Group>
-                <Button variant="primary" type="submit">
-                  Submit
-                </Button>
-              </Form>
-            </Accordion.Body>
-          </Accordion.Item>
-          {/* add by location */}
-          <Accordion.Item>
+        <Form
+          className="d-flex flex-column justify-content-center align-items-center"
+          onSubmit={(e) => handleSubmit(e, "address")}
+        >
+          <Form.Group className="mb-3" controlId="InputName">
+            <Form.Label>Spot Name</Form.Label>
+            <Form.Control type="text" placeholder="" />
+          </Form.Group>
+
+          <Form.Group className="mb-3 " controlId="formLocation">
+            <Form.Label c>Location Coordinates</Form.Label>
+            <div className="d-flex">
+              <Form.Control
+                className="m-2"
+                type="text"
+                placeholder="Latitude"
+              />
+              <Form.Control
+                className="m-2"
+                type="text"
+                placeholder="Longitude"
+              />
+            </div>
+          </Form.Group>
+          <div className="d-flex justify-content-center">
+            <p>OR</p>
+          </div>
+
+          <div className="find-on-map d-flex align-items-center">
+            <FontAwesomeIcon
+              className="ps-4"
+              variant="primary"
+              size="2x"
+              icon={faMap}
+            />
+          </div>
+
+          {/* <Form.Group className="mb-3" controlId="street">
+              <Form.Control type="text" placeholder="Street address" />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="city">
+              <Form.Control type="text" placeholder="City" />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="state">
+              <Form.Control type="text" placeholder="State" />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="zip">
+              <Form.Control type="text" placeholder="Zip code" />
+            </Form.Group> */}
+          <Form.Group className="mb-3" controlId="image">
+            <Form.Label>
+              Location images.
+              <br /> Feel free to upload multiple images
+            </Form.Label>
+            <Form.Control type="file" onChange={handleImageChange} multiple />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="details">
+            <Form.Control as="textarea" rows={3} placeholder="Enter details" />
+          </Form.Group>
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </Form>
+
+        {/* add by location */}
+        {/* <Accordion.Item>
             <Accordion.Header>Add by Current Location</Accordion.Header>
             <Accordion.Body>
               <Form onSubmit={(e) => handleSubmit(e, "location")}>
@@ -203,8 +223,7 @@ function ShopOffcanvas() {
                 </Button>
               </Form>
             </Accordion.Body>
-          </Accordion.Item>
-        </Accordion>
+          </Accordion.Item> */}
       </Offcanvas.Body>
     </Offcanvas>
   );
