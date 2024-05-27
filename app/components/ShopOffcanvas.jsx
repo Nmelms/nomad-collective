@@ -10,6 +10,8 @@ import Form from "react-bootstrap/Form";
 import { supabase } from "../lib/supabaseClient";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Step1 from "./add-location-view/Step1";
+import Step2 from "./add-location-view/Step2";
 import {
   faLocationCrosshairs,
   faCheck,
@@ -32,6 +34,7 @@ function ShopOffcanvas() {
   } = useLocationStore();
   const crosshairRef = useRef(null);
   const [locationIcon, setLocationIcon] = useState(faLocationCrosshairs);
+  const [locationStep, setLocationSet] = useState("step1");
   const { showOffcanvas, setShowOffcanvas } = useUserStore();
   const [imageURLS, setImageURLS] = useState([]);
   const [show, setShow] = useState(showOffcanvas);
@@ -130,32 +133,6 @@ function ShopOffcanvas() {
     }
   };
 
-  const handleFindOnMapClick = () => {
-    setShowOffcanvas(false);
-    const handleCoordMapClick = () => {
-      let currentMarker;
-      map.on("click", (event) => {
-        const coordinates = [event.lngLat.lng, event.lngLat.lat];
-
-        if (currentMarker) {
-          currentMarker.remove();
-        }
-        currentMarker = new mapboxgl.Marker().setLngLat(coordinates).addTo(map);
-
-        setLat(event.lngLat.lat);
-        setLng(event.lngLat.lng);
-        setTimeout(() => {
-          setShowOffcanvas(true);
-        }, 750);
-      });
-    };
-
-    document
-      .querySelector("#map")
-      .addEventListener("click", handleCoordMapClick);
-    handleCoordMapClick();
-  };
-
   useEffect(() => {
     console.log(userLocation);
   }, [userLocation]);
@@ -184,97 +161,8 @@ function ShopOffcanvas() {
         <Offcanvas.Title>Add A Spot</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body>
-        <Form
-          className="d-flex flex-column justify-content-center align-items-center"
-          onSubmit={(e) => handleSubmit(e, "address")}
-        >
-          <Form.Group className="mb-3" controlId="InputName">
-            <Form.Label>Spot Name</Form.Label>
-            <Form.Control
-              onChange={(e) => setName(e.target.value)}
-              value={name}
-              type="text"
-              placeholder=""
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3 " controlId="formLocation">
-            <Form.Label>Location Coordinates</Form.Label>
-            <div className="d-flex">
-              <Form.Control
-                className="m-2"
-                type="text"
-                placeholder="Latitude"
-                value={lat}
-                onChange={(e) => setLat(e.target.value)}
-              />
-              <Form.Control
-                className="m-2"
-                type="text"
-                placeholder="Longitude"
-                value={lng}
-                onChange={(e) => setLng(e.target.value)}
-              />
-            </div>
-          </Form.Group>
-          <div className="d-flex justify-content-center">
-            <p>OR</p>
-          </div>
-
-          <div
-            onClick={handleFindOnMapClick}
-            className="find-on-map d-flex align-items-center"
-          >
-            <FontAwesomeIcon
-              className="ps-4"
-              variant="primary"
-              size="2x"
-              icon={faMap}
-            />
-            <p className="m-0 ps-3">Find on map</p>
-          </div>
-
-          <button
-            onClick={(e) => handleLocationClick(e)}
-            type="button"
-            className="location-button"
-          >
-            Use Current Location
-            <FontAwesomeIcon
-              ref={crosshairRef}
-              className="location-crosshair"
-              variant="primary"
-              type="button"
-              icon={locationIcon}
-            />
-          </button>
-
-          {/* <Form.Group className="mb-3" controlId="street">
-              <Form.Control type="text" placeholder="Street address" />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="city">
-              <Form.Control type="text" placeholder="City" />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="state">
-              <Form.Control type="text" placeholder="State" />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="zip">
-              <Form.Control type="text" placeholder="Zip code" />
-            </Form.Group> */}
-          <Form.Group className="mb-3" controlId="image">
-            <Form.Label>
-              Location images.
-              <br /> Feel free to upload multiple images
-            </Form.Label>
-            <Form.Control type="file" onChange={handleImageChange} multiple />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="details">
-            <Form.Control as="textarea" rows={3} placeholder="Enter details" />
-          </Form.Group>
-          <Button variant="primary" type="submit">
-            Submit
-          </Button>
-        </Form>
+        {locationStep === "step1" && <Step1 />}
+        {locationStep === "step2" && <Step2 />}
       </Offcanvas.Body>
     </Offcanvas>
   );
