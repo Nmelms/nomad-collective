@@ -87,52 +87,6 @@ function ShopOffcanvas() {
     }
   };
 
-  const handleSubmit = async (e, type) => {
-    e.preventDefault();
-    const form = e.target;
-    if (type === "address") {
-      const formData = {
-        name: form.InputName.value,
-        street: form.street.value,
-        city: form.city.value,
-        state: form.state.value,
-        zip: form.zip.value,
-        description: form.details.value,
-        imageURLS: imageURLS,
-        contributor: user,
-      };
-
-      fetch("/api/shop-data", {
-        method: "POST",
-        cache: "no-store",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      })
-        .then(() => setShowOffcanvas(false))
-        .catch((error) => console.log(error, "iin off canvas"));
-    } else if (type === "location") {
-      const formData = {
-        name: form.InputName.value,
-        lat: userLocation[0],
-        lng: userLocation[1],
-        description: form.details.value,
-        contributor: user,
-      };
-      fetch("/api/add-by-location", {
-        method: "POST",
-        cache: "no-store",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      })
-        .then(() => setShowOffcanvas(false))
-        .catch((error) => console.log(error, "iin off canvas"));
-    }
-  };
-
   useEffect(() => {
     console.log(userLocation);
   }, [userLocation]);

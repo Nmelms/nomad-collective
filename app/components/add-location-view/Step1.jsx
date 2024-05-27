@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import useLocationStore from "../../useLocationStore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -6,6 +6,8 @@ import Button from "react-bootstrap/Button";
 import useUserStore from "../../useUserStore";
 import { map } from "../../lib/initMap";
 import mapboxgl from "mapbox-gl";
+import { supabase } from "../../lib/supabaseClient";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import {
   faLocationCrosshairs,
   faCheck,
@@ -14,6 +16,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const Step1 = () => {
+  const supabase = createClientComponentClient();
   const {
     name,
     setName,
@@ -28,6 +31,19 @@ const Step1 = () => {
   const crosshairRef = useRef(null);
   const [locationIcon, setLocationIcon] = useState(faLocationCrosshairs);
   const { showOffcanvas, setShowOffcanvas } = useUserStore();
+  const [user, setUser] = useState(null);
+
+  // checks if there is a user to attribute when adding a new location
+  useEffect(() => {
+    const checkUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user?.user_metadata.display_name);
+    };
+
+    checkUser();
+  }, []);
 
   const handleFindOnMapClick = () => {
     setShowOffcanvas(false);
@@ -54,6 +70,69 @@ const Step1 = () => {
       .addEventListener("click", handleCoordMapClick);
     handleCoordMapClick();
   };
+
+  const handleSubmit = async (e, type) => {
+    e.preventDefault();
+    const form = e.target;
+    const formData = {
+      name: form.InputName.value,
+      lat: lat,
+      lng: lng,
+      description: form.details.value,
+      contributor: user,
+    };
+    fetch("/api/add-by-location", {
+      method: "POST",
+      cache: "no-store",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then(() => setShowOffcanvas(false))
+      .catch((error) => console.log(error, "iin off canvas"));
+  };
+  // if (type === "address") {
+  //   const formData = {
+  //     name: form.InputName.value,
+  //     street: form.street.value,
+  //     city: form.city.value,
+  //     state: form.state.value,
+  //     zip: form.zip.value,
+  //     description: form.details.value,
+  //     imageURLS: imageURLS,
+  //     contributor: user,
+  //   };
+
+  //   fetch("/api/shop-data", {
+  //     method: "POST",
+  //     cache: "no-store",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(formData),
+  //   })
+  //     .then(() => setShowOffcanvas(false))
+  //     .catch((error) => console.log(error, "iin off canvas"));
+  // } else if (type === "location") {
+  //   const formData = {
+  //     name: form.InputName.value,
+  //     lat: userLocation[0],
+  //     lng: userLocation[1],
+  //     description: form.details.value,
+  //     contributor: user,
+  //   };
+  //   fetch("/api/add-by-location", {
+  //     method: "POST",
+  //     cache: "no-store",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(formData),
+  //   })
+  //     .then(() => setShowOffcanvas(false))
+  //     .catch((error) => console.log(error, "iin off canvas"));
+  // }
 
   const handleLocationClick = (e) => {
     e.preventDefault();
