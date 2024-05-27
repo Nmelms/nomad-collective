@@ -30,6 +30,8 @@ function ShopOffcanvas() {
     spotLocation,
     setSpotLocation,
   } = useLocationStore();
+  const crosshairRef = useRef(null);
+  const [locationIcon, setLocationIcon] = useState(faLocationCrosshairs);
   const { showOffcanvas, setShowOffcanvas } = useUserStore();
   const [imageURLS, setImageURLS] = useState([]);
   const [show, setShow] = useState(showOffcanvas);
@@ -158,6 +160,24 @@ function ShopOffcanvas() {
     console.log(userLocation);
   }, [userLocation]);
 
+  const handleLocationClick = (e) => {
+    e.preventDefault();
+    console.log("click");
+    crosshairRef.current.classList.add("spin");
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        crosshairRef.current.classList.remove("spin");
+        setLocationIcon(faCheck);
+        setLat(position.coords.latitude);
+        setLng(position.coords.longitude);
+      },
+      (error) => {
+        setLocationIcon(faX);
+        crosshairRef.current.classList.remove("spin");
+      }
+    );
+  };
+
   return (
     <Offcanvas show={showOffcanvas} onHide={handleClose}>
       <Offcanvas.Header closeButton>
@@ -213,6 +233,21 @@ function ShopOffcanvas() {
             />
             <p className="m-0 ps-3">Find on map</p>
           </div>
+
+          <button
+            onClick={(e) => handleLocationClick(e)}
+            type="button"
+            className="location-button"
+          >
+            Use Current Location
+            <FontAwesomeIcon
+              ref={crosshairRef}
+              className="location-crosshair"
+              variant="primary"
+              type="button"
+              icon={locationIcon}
+            />
+          </button>
 
           {/* <Form.Group className="mb-3" controlId="street">
               <Form.Control type="text" placeholder="Street address" />
