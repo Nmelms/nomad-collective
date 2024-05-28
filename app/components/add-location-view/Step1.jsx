@@ -47,13 +47,13 @@ const Step1 = () => {
 
   const handleFindOnMapClick = () => {
     setShowOffcanvas(false);
-    handleCoordMapClick();
+    map.on("click", mapEvent);
   };
 
   const mapEvent = (event) => {
     const coordinates = [event.lngLat.lng, event.lngLat.lat];
+    //checks if marker exists to only allow one on map at a time
     if (currentMarker) {
-      console.log("remove");
       currentMarker.remove();
     }
     const newMarker = new mapboxgl.Marker().setLngLat(coordinates).addTo(map);
@@ -62,20 +62,12 @@ const Step1 = () => {
     setLng(event.lngLat.lng);
     setTimeout(() => {
       setShowOffcanvas(true);
+      //removes the click event listener it is reenabled if the user clicksthe find on map button again
       map.off("click", mapEvent);
     }, 750);
   };
 
-  useEffect(() => {
-    console.log("current Marker in useState: ", currentMarker);
-  }, [currentMarker]);
-
-  const handleCoordMapClick = () => {
-    map.on("click", mapEvent);
-  };
-
   const handleSubmit = async (e, type) => {
-    console.log("then rean");
     e.preventDefault();
     const form = e.target;
     const formData = {
@@ -98,6 +90,7 @@ const Step1 = () => {
       })
       .catch((error) => console.log(error, "iin off canvas"));
   };
+
   // if (type === "address") {
   //   const formData = {
   //     name: form.InputName.value,
@@ -157,12 +150,28 @@ const Step1 = () => {
     );
   };
 
+  async function uploadImages(files) {
+    const uploadPromises = files.map((file) => {
+      return supabase.storage
+        .from("coffee-shop-images")
+        .upload(`${file.name}`, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+    });
+    const results = await Promise.all(uploadPromises);
+    const uploadResponses = [];
+    results.map((result) => uploadResponses.push(result.data.fullPath));
+    setImageURLS(uploadResponses);
+  }
+
   const handleImageChange = async (e) => {
     if (e.target.files && e.target.files[0]) {
       let files = Array.from(e.target.files);
       let url = await uploadImages(files);
     }
   };
+
   return (
     <Form
       className="d-flex flex-column justify-content-center align-items-center"

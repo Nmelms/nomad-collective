@@ -49,65 +49,10 @@ function ShopOffcanvas() {
       } = await supabase.auth.getUser();
       setUser(user?.user_metadata.display_name);
     };
-
     checkUser();
   }, []);
 
   const handleClose = () => setShowOffcanvas(false);
-
-  async function uploadImages(files) {
-    console.log(typeof files, files);
-    console.log(typeof files, "these are the files");
-
-    const uploadPromises = files.map((file) => {
-      console.log(file);
-      return supabase.storage
-        .from("coffee-shop-images")
-        .upload(`${file.name}`, file, {
-          cacheControl: "3600",
-          upsert: false,
-        });
-    });
-
-    const results = await Promise.all(uploadPromises);
-    console.log(results, "thsse are the resutls");
-
-    const uploadResponses = [];
-    results.map((result) => uploadResponses.push(result.data.fullPath));
-    setImageURLS(uploadResponses);
-  }
-  useEffect(() => {
-    console.log(imageURLS);
-  }, [imageURLS]);
-
-  const handleImageChange = async (e) => {
-    if (e.target.files && e.target.files[0]) {
-      let files = Array.from(e.target.files);
-      let url = await uploadImages(files);
-    }
-  };
-
-  useEffect(() => {
-    console.log(userLocation);
-  }, [userLocation]);
-
-  const handleLocationClick = (e) => {
-    e.preventDefault();
-    console.log("click");
-    crosshairRef.current.classList.add("spin");
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        crosshairRef.current.classList.remove("spin");
-        setLocationIcon(faCheck);
-        setLat(position.coords.latitude);
-        setLng(position.coords.longitude);
-      },
-      (error) => {
-        setLocationIcon(faX);
-        crosshairRef.current.classList.remove("spin");
-      }
-    );
-  };
 
   return (
     <Offcanvas show={showOffcanvas} onHide={handleClose}>
