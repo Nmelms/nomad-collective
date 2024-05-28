@@ -6,6 +6,7 @@ const useLocationStore = create((set) => ({
   lng: 0,
   name: "",
   spotLocation: [],
+  currentMarker: null,
 
   // actions,
   setCoords: (lat, lng) => set({ lat, lng }),
@@ -13,6 +14,7 @@ const useLocationStore = create((set) => ({
   setLng: (lng) => set({ lng }),
   setName: (name) => set({ name }),
   setSpotLocation: (spotLocation) => set({ spotLocation }),
+  setCurrentMarker: (currentMarker) => set({ currentMarker }),
 }));
 
 export default useLocationStore;

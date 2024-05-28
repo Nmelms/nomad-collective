@@ -24,14 +24,14 @@ const Step1 = () => {
     lng,
     setLat,
     setLng,
-    setCoords,
-    spotLocation,
-    setSpotLocation,
+    currentMarker,
+    setCurrentMarker,
   } = useLocationStore();
   const crosshairRef = useRef(null);
   const [locationIcon, setLocationIcon] = useState(faLocationCrosshairs);
   const { showOffcanvas, setShowOffcanvas } = useUserStore();
   const [user, setUser] = useState(null);
+  let currentMap;
 
   // checks if there is a user to attribute when adding a new location
   useEffect(() => {
@@ -47,31 +47,35 @@ const Step1 = () => {
 
   const handleFindOnMapClick = () => {
     setShowOffcanvas(false);
-    const handleCoordMapClick = () => {
-      let currentMarker;
-      map.on("click", (event) => {
-        const coordinates = [event.lngLat.lng, event.lngLat.lat];
-
-        if (currentMarker) {
-          currentMarker.remove();
-        }
-        currentMarker = new mapboxgl.Marker().setLngLat(coordinates).addTo(map);
-
-        setLat(event.lngLat.lat);
-        setLng(event.lngLat.lng);
-        setTimeout(() => {
-          setShowOffcanvas(true);
-        }, 750);
-      });
-    };
-
-    document
-      .querySelector("#map")
-      .addEventListener("click", handleCoordMapClick);
     handleCoordMapClick();
   };
 
+  const mapEvent = (event) => {
+    const coordinates = [event.lngLat.lng, event.lngLat.lat];
+    if (currentMarker) {
+      console.log("remove");
+      currentMarker.remove();
+    }
+    const newMarker = new mapboxgl.Marker().setLngLat(coordinates).addTo(map);
+    setCurrentMarker(newMarker);
+    setLat(event.lngLat.lat);
+    setLng(event.lngLat.lng);
+    setTimeout(() => {
+      setShowOffcanvas(true);
+      map.off("click", mapEvent);
+    }, 750);
+  };
+
+  useEffect(() => {
+    console.log("current Marker in useState: ", currentMarker);
+  }, [currentMarker]);
+
+  const handleCoordMapClick = () => {
+    map.on("click", mapEvent);
+  };
+
   const handleSubmit = async (e, type) => {
+    console.log("then rean");
     e.preventDefault();
     const form = e.target;
     const formData = {
@@ -89,7 +93,9 @@ const Step1 = () => {
       },
       body: JSON.stringify(formData),
     })
-      .then(() => setShowOffcanvas(false))
+      .then(() => {
+        setShowOffcanvas(false);
+      })
       .catch((error) => console.log(error, "iin off canvas"));
   };
   // if (type === "address") {
@@ -136,7 +142,6 @@ const Step1 = () => {
 
   const handleLocationClick = (e) => {
     e.preventDefault();
-    console.log("click");
     crosshairRef.current.classList.add("spin");
     navigator.geolocation.getCurrentPosition(
       (position) => {
