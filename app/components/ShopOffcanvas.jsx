@@ -1,23 +1,12 @@
 "use client";
 import React, { FormEventHandler, useState, useEffect, useRef } from "react";
-import { map } from "../lib/initMap";
-import mapboxgl from "mapbox-gl";
-import Button from "react-bootstrap/Button";
 import useLocationStore from "../useLocationStore";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import useUserStore from "../useUserStore";
-import Form from "react-bootstrap/Form";
-import { supabase } from "../lib/supabaseClient";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Step1 from "./add-location-view/Step1";
 import Step2 from "./add-location-view/Step2";
-import {
-  faLocationCrosshairs,
-  faCheck,
-  faX,
-  faMap,
-} from "@fortawesome/free-solid-svg-icons";
+import { faLocationCrosshairs } from "@fortawesome/free-solid-svg-icons";
 
 function ShopOffcanvas() {
   const supabase = createClientComponentClient();
