@@ -6,6 +6,7 @@ import Link from "next/link";
 import useUserStore from "../useUserStore";
 import initMap from "../lib/initMap";
 import StorePopup from "./StorePopup";
+import useLocationStore from "../useLocationStore";
 
 const MapboxMap = () => {
   const {
@@ -18,6 +19,7 @@ const MapboxMap = () => {
     setPopupData,
     popupData,
   } = useUserStore();
+  const { setSpotLocation, spotLocation } = useLocationStore();
 
   const mapContainer = useRef(null);
   const mapRef = useRef(null);
@@ -94,10 +96,15 @@ const MapboxMap = () => {
         router,
         setShowPopup,
         showPopup,
-        setPopupData
+        setPopupData,
+        setSpotLocation
       );
     }
   }, [shopData]);
+
+  useEffect(() => {
+    console.log("spot location:", spotLocation);
+  }, [spotLocation]);
 
   return (
     <div id="map" style={{ height: "90dvh" }}>

@@ -2,6 +2,7 @@ import mapboxgl from "mapbox-gl";
 import toTitleCase from "./toTitleCase";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 let isEventHandled = false;
+let map: mapboxgl.Map;
 
 const initMap = (
   shopData: any,
@@ -10,12 +11,13 @@ const initMap = (
   router: AppRouterInstance,
   setShowPopup: (arg0: boolean) => void,
   showPopup: boolean,
-  setPopupData: (arg0: any) => PopupStoreProps
+  setPopupData: (arg0: any) => PopupStoreProps,
+  setSpotLocation: any
 ) => {
   mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 
   if (isMapSet) return;
-  let map = new mapboxgl.Map({
+  map = new mapboxgl.Map({
     container: "map",
     style: "mapbox://styles/mapbox/streets-v11",
     center: [-80.812992, 35.344192],
@@ -106,9 +108,12 @@ const initMap = (
       return;
     }
 
+    const { lng, lat } = e.lngLat.wrap();
+    setSpotLocation([lng, lat]);
+
     setShowPopup(false);
   });
-
+  // map.on("mousemove", (e) => {});
   map.on(
     "click",
     "clusters",
@@ -168,6 +173,7 @@ const initMap = (
 };
 
 export default initMap;
+export { map };
 
 // const popup = new mapboxgl.Popup().setLngLat(coordinates).setHTML(
 //   //this is a work around to keep the Reloads down
